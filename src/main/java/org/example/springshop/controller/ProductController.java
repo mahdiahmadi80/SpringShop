@@ -23,17 +23,17 @@ public class ProductController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Product productAdd(@RequestBody ProductRequestModel productRequestModel) {
-        return productService.productAdd(productRequestModel);
+        return productService.addProduct(productRequestModel);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
     public Product productEdit(@PathVariable Long id, @RequestBody ProductRequestModel productRequestModel) {
-        return productService.productEdit(id, productRequestModel);
+        return productService.editProduct(id, productRequestModel);
     }
 
     @DeleteMapping(value = "delete/{id}")
     public void deleteProduct(@PathVariable Long id) {
-        productService.productDelete(id);
+        productService.deleteProduct(id);
     }
 
 }

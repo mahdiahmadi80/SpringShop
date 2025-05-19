@@ -16,7 +16,7 @@ public class UserRequestModel {
     private String name;
     @JsonProperty("password")
     private String password;
-    @JsonProperty("account")
-    private Long account;
+    @JsonProperty("wallet")
+    private Long wallet;
 
 }

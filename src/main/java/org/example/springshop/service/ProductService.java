@@ -9,28 +9,52 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class ProductService implements ProductInt {
     @Autowired
     private ProductRepository productRepository;
 
+    @Override
     public List<Product> productList() {
         return productRepository.findAll();
     }
 
-    public Product productAdd(ProductRequestModel productRequestModel) {
-        Product newProduct = Product.builder().request(productRequestModel).build();
+    @Override
+    public Product addProduct(ProductRequestModel requestModel) {
+        Product newProduct = Product.builder().request(requestModel).build();
         return productRepository.save(newProduct);
     }
 
-    public void productDelete(Long id) {
-        productRepository.deleteById(id);
-    }
-
-    public Product productEdit(Long id, ProductRequestModel productRequestModel) {
+    @Override
+    public Product editProduct(Long id, ProductRequestModel productRequestModel) {
         Product oldProduct = productRepository.findById(id).orElseThrow();
         oldProduct.setProductName(productRequestModel.getProductName());
         oldProduct.setProductPrice(productRequestModel.getProductPrice());
         oldProduct.setProductExist(productRequestModel.getProductExist());
         return productRepository.save(oldProduct);
     }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
+
+//    public List<Product> productList() {
+//        return productRepository.findAll();
+//    }
+//    public Product productAdd(ProductRequestModel productRequestModel) {
+//        Product newProduct = Product.builder().request(productRequestModel).build();
+//        return productRepository.save(newProduct);
+//    }
+//    public Product productEdit(Long id, ProductRequestModel productRequestModel) {
+//        Product oldProduct = productRepository.findById(id).orElseThrow();
+//        oldProduct.setProductName(productRequestModel.getProductName());
+//        oldProduct.setProductPrice(productRequestModel.getProductPrice());
+//        oldProduct.setProductExist(productRequestModel.getProductExist());
+//        return productRepository.save(oldProduct);
+//    }
+//    public void productDelete(Long id) {
+//        productRepository.deleteById(id);
+//    }
+
 }

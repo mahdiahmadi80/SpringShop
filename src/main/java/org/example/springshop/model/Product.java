@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.ProductRequestModel;
+import org.springframework.stereotype.Component;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 @Table(name = "TBL_PRODUCT")
 public class Product {
     @Id
