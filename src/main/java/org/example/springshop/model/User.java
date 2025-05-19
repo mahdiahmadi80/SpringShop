@@ -48,11 +48,10 @@ public class User {
 //        this.wallet = Wallet.builder().walletRequestModel(walletRequestModel).build();
 //    }
     @Builder
-    public User(UserRequestModel userRequestModel, WalletRequestModel walletRequestModel) {
+    public User(UserRequestModel userRequestModel, WalletRequestModel walletRequestModel,Wallet wallet) {
         this.name = userRequestModel.getName();
         this.password = userRequestModel.getPassword();
-        this.wallet = Wallet.builder()
-                .walletRequestModel(walletRequestModel).build();
+        this.wallet = wallet;
     }
 
 }

@@ -25,12 +25,15 @@ public class OrderService implements OrderInt {
 
     @Override
     public List<Order> orderList() {
-        return List.of();
+        return orderRepository.findAll();
     }
 
     @Override
-    public Order orderAdd(OrderRequestModel orderrequestModel) {
-        return null;
+    public Order orderAdd(OrderRequestModel orderRequestModel) {
+        User user = userRepository.findById(orderRequestModel.getUserid()).orElseThrow();
+        Product product = productRepository.findById(orderRequestModel.getProductid()).orElseThrow();
+        Order order = Order.OrderBuilder().product(product).user(user).build();
+        return orderRepository.save(order);
     }
 
     @Override
@@ -39,21 +42,12 @@ public class OrderService implements OrderInt {
     }
 
     @Override
-    public void orderDelete(Long id) {
-        orderRepository.deleteById(id);
-    }
-
-    @Override
     public User userSearch(Long id) {
         return orderRepository.findById(id).orElseThrow().getUser();
     }
 
-
     @Override
-    public Order searchOrder(OrderRequestModel orderRequestModel) {
-        User user = userRepository.findById(orderRequestModel.getId()).orElseThrow();
-        Product product = productRepository.findById(orderRequestModel.getUserid()).orElseThrow();
-        Order order = Order.OrderBuilder().product(product).user(user).build();
-        return orderRepository.save(order);
+    public void orderDelete(Long id) {
+        orderRepository.deleteById(id);
     }
 }

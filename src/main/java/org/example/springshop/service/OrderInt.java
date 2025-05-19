@@ -10,14 +10,12 @@ import java.util.List;
 public interface OrderInt {
     List<Order> orderList();
 
-    Order orderAdd(OrderRequestModel orderrequestModel);
+    Order orderAdd(OrderRequestModel orderRequestModel);
+
 
     Order orderEdit(Long id, OrderRequestModel orderRequestModel);
 
-    void orderDelete(Long id);
-
     User userSearch(Long id);
 
-
-    Order searchOrder(OrderRequestModel orderRequestModel);
+    void orderDelete(Long id);
 }
