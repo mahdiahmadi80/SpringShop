@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.dto.OrderRequestModel;
-import org.example.springshop.model.dto.ProductRequestModel;
-import org.example.springshop.model.dto.UserRequestModel;
 
 @Data
 @Entity
@@ -27,10 +24,11 @@ public class Order {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
-    @Builder
-    public Order(OrderRequestModel orderRequestModel, UserRequestModel userRequestModel , ProductRequestModel productRequestModel) {
-        this.id = orderRequestModel.getId();
-        this.user = User.builder().userRequestModel(userRequestModel).build();
-        this.product = Product.builder().request(productRequestModel).build();
+    @Builder(builderClassName = "ORDERCLASS", builderMethodName = "OrderBuilder")
+    public Order(User user, Product product) {
+        this.user = user;
+        this.product = product;
     }
+
+
 }

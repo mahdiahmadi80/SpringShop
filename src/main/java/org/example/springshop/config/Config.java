@@ -31,7 +31,7 @@ public class Config {
                         .anyRequest().permitAll()
                 ).addFilterBefore(new JwtToKenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return null;
     }
 

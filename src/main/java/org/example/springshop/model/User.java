@@ -28,17 +28,18 @@ public class User {
     private String name;
     @Column(name = "PASSWORD")
     private String password;
-    @Column(name = "USER_ROLE")
-    private UserRole role;
 
-    @JsonIgnore
-    @OneToMany
-    private List<Order> orders = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "WALLET_ID")
     private Wallet wallet;
 
+    @Column(name = "USER_ROLE")
+    private UserRole role;
+
+    //    @JsonIgnore
+//    @OneToMany
+//    private List<Order> orders = new ArrayList<>();
     //    @Builder
 //    public User(UserRequestModel userRequestModel, WalletRequestModel walletRequestModel) {
 //
@@ -50,8 +51,8 @@ public class User {
     public User(UserRequestModel userRequestModel, WalletRequestModel walletRequestModel) {
         this.name = userRequestModel.getName();
         this.password = userRequestModel.getPassword();
-        Wallet wallet1 = Wallet.builder().walletRequestModel(walletRequestModel).build();
-        this.wallet = wallet1;
+        this.wallet = Wallet.builder()
+                .walletRequestModel(walletRequestModel).build();
     }
 
 }

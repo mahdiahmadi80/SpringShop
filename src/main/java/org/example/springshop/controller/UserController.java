@@ -1,6 +1,7 @@
 package org.example.springshop.controller;
 
 import org.example.springshop.model.User;
+import org.example.springshop.model.Wallet;
 import org.example.springshop.model.dto.UserRequestModel;
 import org.example.springshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,10 @@ public class UserController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public User userAdd(@RequestBody UserRequestModel userRequestModel) {
-        return userService.userAdd(User.builder().userRequestModel(userRequestModel).build());
+
+
+        return userService.userAdd(User
+                .builder().userRequestModel(userRequestModel).build());
     }
 
     @DeleteMapping(value = "/delete/{id}")
