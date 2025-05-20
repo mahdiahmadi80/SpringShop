@@ -17,8 +17,8 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "ACCOUNTNUMBER")
-    private Long accountNumber;
+    @Column(name = "USER_ID")
+    private Long userId;
     @Column(name = "BALANCE")
     private Long balance;
 
@@ -26,7 +26,7 @@ public class Wallet {
     @Builder
     public Wallet(WalletRequestModel walletRequestModel) {
         this.id = walletRequestModel.getId();
-        this.accountNumber = walletRequestModel.getAccountNumber();
+        this.userId = walletRequestModel.getAccountNumber();
         this.balance = walletRequestModel.getBalance();
     }
 }

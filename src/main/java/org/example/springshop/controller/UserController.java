@@ -7,7 +7,6 @@ import org.example.springshop.model.dto.UserRequestModel;
 import org.example.springshop.repository.UserRepository;
 import org.example.springshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,11 +33,15 @@ public class UserController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public User userAdd(@RequestBody UserRequestModel userRequestModel) {
-
+        return userService.userAdd(userRequestModel);
 //
 //        return userService.userAdd(User
 //                .builder().userRequestModel(userRequestModel).build());
-        return userService.userAdd(userRequestModel);
+    }
+
+    @RequestMapping(value = "/login")
+    public String login(@RequestBody UserRequestModel userRequestModel) {
+        return userService.verify(userRequestModel);
     }
 
     @DeleteMapping(value = "/delete/{id}")

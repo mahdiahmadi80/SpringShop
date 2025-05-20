@@ -10,6 +10,7 @@ import org.example.springshop.model.dto.WalletRequestModel;
 import org.example.springshop.model.dto.UserRequestModel;
 import org.springframework.stereotype.Component;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +29,7 @@ public class User {
     private String name;
     @Column(name = "PASSWORD")
     private String password;
-
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "WALLET_ID")
     private Wallet wallet;
 
@@ -48,10 +47,11 @@ public class User {
 //        this.wallet = Wallet.builder().walletRequestModel(walletRequestModel).build();
 //    }
     @Builder
-    public User(UserRequestModel userRequestModel, WalletRequestModel walletRequestModel,Wallet wallet) {
+    public User(UserRequestModel userRequestModel, Wallet wallet, UserRole userRole) {
         this.name = userRequestModel.getName();
         this.password = userRequestModel.getPassword();
         this.wallet = wallet;
+        this.role = userRole;
     }
 
 }
