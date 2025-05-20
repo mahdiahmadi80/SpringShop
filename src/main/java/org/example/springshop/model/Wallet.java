@@ -26,7 +26,7 @@ public class Wallet {
     @Builder
     public Wallet(WalletRequestModel walletRequestModel) {
         this.id = walletRequestModel.getId();
-        this.userId = walletRequestModel.getAccountNumber();
+        this.userId = walletRequestModel.getUserId();
         this.balance = walletRequestModel.getBalance();
     }
 }

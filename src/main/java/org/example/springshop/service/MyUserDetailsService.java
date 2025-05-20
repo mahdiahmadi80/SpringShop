@@ -1,5 +1,7 @@
-package org.example.springshop.model;
+package org.example.springshop.service;
 
+import org.example.springshop.model.User;
+import org.example.springshop.model.UserPrincipal;
 import org.example.springshop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
