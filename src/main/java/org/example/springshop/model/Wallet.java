@@ -17,16 +17,17 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "USER_ID")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User userId;
     @Column(name = "BALANCE")
     private Long balance;
 
 
     @Builder
-    public Wallet(WalletRequestModel walletRequestModel) {
+    public Wallet(WalletRequestModel walletRequestModel, User user) {
         this.id = walletRequestModel.getId();
-        this.userId = walletRequestModel.getUserId();
         this.balance = walletRequestModel.getBalance();
+        this.userId = user;
     }
 }

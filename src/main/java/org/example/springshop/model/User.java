@@ -33,6 +33,7 @@ public class User {
     @JoinColumn(name = "WALLET_ID")
     private Wallet wallet;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "USER_ROLE")
     private UserRole role;
 
@@ -51,7 +52,7 @@ public class User {
         this.name = userRequestModel.getName();
         this.password = userRequestModel.getPassword();
         this.wallet = wallet;
-        this.role = userRole;
+        this.role = userRequestModel.getUserRole();
     }
 
 }

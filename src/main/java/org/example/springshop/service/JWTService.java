@@ -32,6 +32,12 @@ public class JWTService {
         }
     }
 
+    private SecretKey getKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+    //JWT
+
     public String generateToken(String name) {
         Map<String, Objects> claims = new HashMap<>();
 
@@ -46,13 +52,8 @@ public class JWTService {
                 .compact();
     }
 
-    private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
 
-    }
-
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getKey())
                 .build()
@@ -63,19 +64,22 @@ public class JWTService {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
+
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String userName =extractUserName(token);
+        final String userName = extractUserName(token);
 
-    return (userName.equals(userDetails.getUsername())&&!isTokenExpired(token));
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-    private Boolean isTokenExpired(String token){
+
+    private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-    private Date extractExpiration(String token){
-        return extractClaim(token,Claims::getExpiration);
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 }

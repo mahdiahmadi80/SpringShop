@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.springshop.model.UserRole;
 import org.example.springshop.model.Wallet;
 
 @NoArgsConstructor
@@ -19,6 +20,5 @@ public class UserRequestModel {
     @JsonProperty("wallet")
     private Long wallet;
     @JsonProperty("user_role")
-    private String userRole;
-
+    private UserRole userRole;
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserInt {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,7 +27,6 @@ public class UserService {
     @Autowired
     private JWTService jwtService;
 
-    private WalletRequestModel walletRequestModel;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 
@@ -39,12 +38,17 @@ public class UserService {
 
         userRequestModel.setPassword(encoder.encode(userRequestModel.getPassword()));
 
-        Wallet wallet = new Wallet();
-        User user = User.builder().userRequestModel(userRequestModel).wallet(wallet).build();
-        wallet.setUserId(userRequestModel.getId());
-        wallet.setBalance(0L);
+        User user = User.builder().userRequestModel(userRequestModel).userRole(userRequestModel.getUserRole()).build();
 
+        user = userRepository.save(user);
+
+        Wallet wallet = new Wallet();
+        wallet.setUserId(user);
+        wallet.setBalance(0L);
         walletRepository.save(wallet);
+
+        user.setWallet(wallet);
+
         return userRepository.save(user);
     }
 
