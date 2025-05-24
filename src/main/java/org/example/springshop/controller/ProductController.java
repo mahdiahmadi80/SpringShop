@@ -5,6 +5,7 @@ import org.example.springshop.model.dto.ProductRequestModel;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<Product> productList() {
