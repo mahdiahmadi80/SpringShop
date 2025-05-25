@@ -1,8 +1,9 @@
 package org.example.springshop.service;
 
 import org.example.springshop.model.Product;
-import org.example.springshop.model.dto.ProductRequestModel;
+import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.example.springshop.repository.ProductRepository;
+import org.example.springshop.service.serviceint.ProductInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class ProductService implements ProductInt {
     }
     @Override
     public Product addProduct(ProductRequestModel requestModel) {
-        Product newProduct = Product.builder().request(requestModel).build();
+        Product newProduct = Product.ProductBuilder().request(requestModel).build();
         return productRepository.save(newProduct);
     }
     @Override

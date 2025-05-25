@@ -2,8 +2,8 @@ package org.example.springshop.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.springshop.model.User;
-import org.example.springshop.model.Wallet;
-import org.example.springshop.model.dto.UserRequestModel;
+import org.example.springshop.model.dto.responsemodel.UserResponseModel;
+import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 import org.example.springshop.repository.UserRepository;
 import org.example.springshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<User> userList() {
+    public List<UserResponseModel> userList() {
         return userService.userList();
     }
 
@@ -34,9 +34,7 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public User userAdd(@RequestBody UserRequestModel userRequestModel) {
         return userService.userAdd(userRequestModel);
-//
-//        return userService.userAdd(User
-//                .builder().userRequestModel(userRequestModel).build());
+
     }
 
     @RequestMapping(value = "/login")

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.dto.WalletRequestModel;
+import org.example.springshop.model.dto.requestmodel.WalletRequestModel;
 
 @Data
 @Entity
@@ -17,7 +17,7 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "USER_ID")
     private User userId;
     @Column(name = "BALANCE")

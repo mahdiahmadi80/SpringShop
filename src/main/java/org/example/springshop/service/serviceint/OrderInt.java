@@ -1,14 +1,14 @@
-package org.example.springshop.service;
+package org.example.springshop.service.serviceint;
 
 import org.example.springshop.model.Order;
-import org.example.springshop.model.Product;
 import org.example.springshop.model.User;
-import org.example.springshop.model.dto.OrderRequestModel;
+import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
+import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
 
 import java.util.List;
 
 public interface OrderInt {
-    List<Order> orderList();
+    List<OrderResponseModel> orderList();
 
     Order orderAdd(OrderRequestModel orderRequestModel);
 

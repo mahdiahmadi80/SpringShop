@@ -1,11 +1,9 @@
 package org.example.springshop.controller;
 
 import org.example.springshop.model.Product;
-import org.example.springshop.model.dto.ProductRequestModel;
-import org.example.springshop.repository.ProductRepository;
+import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.example.springshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

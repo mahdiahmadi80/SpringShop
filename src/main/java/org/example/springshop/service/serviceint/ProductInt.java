@@ -1,7 +1,7 @@
-package org.example.springshop.service;
+package org.example.springshop.service.serviceint;
 
 import org.example.springshop.model.Product;
-import org.example.springshop.model.dto.ProductRequestModel;
+import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 
 import java.util.List;
 

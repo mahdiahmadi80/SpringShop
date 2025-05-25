@@ -1,9 +1,8 @@
 package org.example.springshop.controller;
 
 import org.example.springshop.model.Order;
-import org.example.springshop.model.Product;
-import org.example.springshop.model.dto.OrderRequestModel;
-import org.example.springshop.repository.OrderRepository;
+import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
+import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
 import org.example.springshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +14,9 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private OrderRepository orderRepository;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<Order> orderList() {
+    public List<OrderResponseModel> orderList() {
         return orderService.orderList();
     }
 
@@ -34,7 +31,7 @@ public class OrderController {
         return orderService.orderEdit(id, orderRequestModel);
     }
 
-    @RequestMapping(value = "/delete/{id}")
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
     public void orderDelete(@PathVariable Long id) {
         orderService.orderDelete(id);
     }

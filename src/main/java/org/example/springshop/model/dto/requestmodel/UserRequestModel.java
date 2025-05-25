@@ -1,11 +1,10 @@
-package org.example.springshop.model.dto;
+package org.example.springshop.model.dto.requestmodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.UserRole;
-import org.example.springshop.model.Wallet;
 
 @NoArgsConstructor
 @AllArgsConstructor

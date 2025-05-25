@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.dto.ProductRequestModel;
+import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.springframework.stereotype.Component;
 
 @Data
@@ -27,7 +27,7 @@ public class Product {
     private Long productExist;
 
 
-    @Builder
+    @Builder(builderClassName = "PRODUCTCLASS", builderMethodName = "ProductBuilder")
     public Product(ProductRequestModel request) {
         this.productName = request.getProductName();
         this.productPrice = request.getProductPrice();

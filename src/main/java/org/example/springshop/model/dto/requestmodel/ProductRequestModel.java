@@ -1,4 +1,4 @@
-package org.example.springshop.model.dto;
+package org.example.springshop.model.dto.requestmodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.math.BigInteger;
-import java.security.Key;
-import java.security.MessageDigest;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
