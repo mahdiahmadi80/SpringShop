@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 @Table(name = "TBL_USER")
 public class User {
     @Id
@@ -27,12 +26,11 @@ public class User {
     @OneToOne
     @JoinColumn(name = "WALLET_ID")
     private Wallet wallet;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "USER_ROLE")
     private UserRole role;
 
-    @Builder
+    @Builder(builderClassName = "UserClass",builderMethodName ="userBuilder" )
     public User(UserRequestModel userRequestModel, Wallet wallet, UserRole userRole) {
         this.name = userRequestModel.getName();
         this.password = userRequestModel.getPassword();

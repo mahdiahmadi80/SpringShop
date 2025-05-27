@@ -4,6 +4,7 @@ import org.example.springshop.model.Product;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.example.springshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,9 +13,10 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
-
+    private final ProductService productService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<Product> productList() {

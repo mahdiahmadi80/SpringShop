@@ -10,10 +10,12 @@ public interface UserInt {
 
     List<UserResponseModel> userList();
 
+    UserResponseModel userSearch(Long id);
+
     User userAdd(UserRequestModel userRequestModel);
 
     void userDelete(Long id);
 
     String verify(UserRequestModel userRequestModel);
-User findById(Long id);
+//User findById(Long id);
 }

@@ -12,17 +12,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+
+    private final OrderService orderService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<OrderResponseModel> orderList() {
         return orderService.orderList();
     }
 
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Order orderAdd(@RequestBody OrderRequestModel orderRequestModel) {
+    public OrderResponseModel orderAdd(@RequestBody OrderRequestModel orderRequestModel) {
         return orderService.orderAdd(orderRequestModel);
     }
 

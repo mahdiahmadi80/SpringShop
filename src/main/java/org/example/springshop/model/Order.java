@@ -23,7 +23,7 @@ public class Order {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
-    @Builder(builderClassName = "ORDERCLASS", builderMethodName = "OrderBuilder")
+    @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
     public Order(User user, Product product) {
         this.user = user;
         this.product = product;

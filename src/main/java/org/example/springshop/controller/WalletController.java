@@ -1,10 +1,8 @@
 package org.example.springshop.controller;
 
-import org.example.springshop.model.Wallet;
 import org.example.springshop.model.dto.requestmodel.WalletRequestModel;
 import org.example.springshop.model.dto.responsemodel.WalletResponseModel;
 import org.example.springshop.service.WalletService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +11,11 @@ import java.util.List;
 @RequestMapping("/wallet")
 public class WalletController {
 
-    @Autowired
-    private WalletService walletService;
+
+    private final WalletService walletService;
+    public WalletController(WalletService walletService) {
+        this.walletService = walletService;
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<WalletResponseModel> wallelList() {
@@ -22,7 +23,7 @@ public class WalletController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Wallet showBalance(@PathVariable Long id) {
+    public WalletResponseModel showBalance(@PathVariable Long id) {
         return walletService.showBalance(id);
     }
 

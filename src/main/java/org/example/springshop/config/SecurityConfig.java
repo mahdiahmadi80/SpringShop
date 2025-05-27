@@ -24,28 +24,55 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @Configuration
 @EnableWebSecurity
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private JwtFilter jwtFilter;
 
-//for MD5
+    private final UserDetailsService userDetailsService;
+    private final JwtFilter jwtFilter;
+    public SecurityConfig(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
+        this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
+    }
+
+
+
+    public static String generateMD5Hash(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(password.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+    //for MD5
     @Bean
     PasswordEncoder passwordEncoder() {
         return new PasswordEncoder() {
             @Override
             public String encode(CharSequence rawPassword) {
-                return UserService.generateMD5Hash(rawPassword.toString());
+                return generateMD5Hash(rawPassword.toString());
             }
 
             @Override
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return UserService.generateMD5Hash(rawPassword.toString()).equals(encodedPassword);
+                return generateMD5Hash(rawPassword.toString()).equals(encodedPassword);
             }
         };
     }
@@ -56,8 +83,8 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("user/add", "user/login")
-                        .permitAll()
+                        .requestMatchers("user/add", "user/login").permitAll()
+                        .requestMatchers("product/**").hasAnyRole("OWNER","ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session ->

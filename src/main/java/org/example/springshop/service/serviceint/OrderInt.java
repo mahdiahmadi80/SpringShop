@@ -10,11 +10,11 @@ import java.util.List;
 public interface OrderInt {
     List<OrderResponseModel> orderList();
 
-    Order orderAdd(OrderRequestModel orderRequestModel);
+    OrderResponseModel orderAdd(OrderRequestModel orderRequestModel);
 
     Order orderEdit(Long id, OrderRequestModel orderRequestModel);
 
-    User userSearch(Long id);
+
 
     void orderDelete(Long id);
 }

@@ -1,18 +1,22 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.productException.ProductValueException;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.service.serviceint.ProductInt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductService implements ProductInt {
-    @Autowired
-    private ProductRepository productRepository;
+
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     public List<Product> productList() {
@@ -20,15 +24,23 @@ public class ProductService implements ProductInt {
     }
     @Override
     public Product addProduct(ProductRequestModel requestModel) {
-        Product newProduct = Product.ProductBuilder().request(requestModel).build();
+
+        Product newProduct;
+        try {
+            newProduct = Product.productBuilder().request(requestModel).build();
+        }catch (ProductValueException e){
+            throw new ProductValueException("value is false");
+        }
         return productRepository.save(newProduct);
     }
     @Override
     public Product editProduct(Long id, ProductRequestModel productRequestModel) {
+
         Product oldProduct = productRepository.findById(id).orElseThrow();
         oldProduct.setProductName(productRequestModel.getProductName());
         oldProduct.setProductPrice(productRequestModel.getProductPrice());
         oldProduct.setProductExist(productRequestModel.getProductExist());
+
         return productRepository.save(oldProduct);
     }
     @Override

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 @Table(name = "TBL_PRODUCT")
 public class Product {
     @Id
@@ -27,7 +26,7 @@ public class Product {
     private Long productExist;
 
 
-    @Builder(builderClassName = "PRODUCTCLASS", builderMethodName = "ProductBuilder")
+    @Builder(builderClassName = "ProductClass", builderMethodName = "productBuilder")
     public Product(ProductRequestModel request) {
         this.productName = request.getProductName();
         this.productPrice = request.getProductPrice();
