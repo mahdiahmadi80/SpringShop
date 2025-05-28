@@ -47,7 +47,6 @@ public class OrderService implements OrderInt {
         orderRepository.findAll().forEach(order -> {
             OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(order).build();
             orderResponseModels.add(orderResponseModel);
-
         });
         return orderResponseModels;
     }
@@ -59,35 +58,31 @@ public class OrderService implements OrderInt {
         User user = userRepository.findById(orderRequestModel.getUserid()).orElseThrow(() -> new UserNotFoundException("user not found"));
         Product product = productRepository.findById(orderRequestModel.getProductid()).orElseThrow(() -> new ProductNotExist("product not enough"));
 
-        Order newOrder = Order.orderBuilder().user(user).product(product).build();
+        Order newOrder = Order.orderBuilder().user(user).product(product).productCount(orderRequestModel.getProductCount()).build();
+
         if (user.getWallet().getBalance() < product.getProductPrice()) {
             throw new NotEnoughMoneyException(" your wallet Balance is enough for buy this product");
         }
-
+        if (orderRequestModel.getProductCount() > product.getProductExist()) {
+            throw new ProductNotExist("your count over than exist");
+        }
         if (product.getProductExist() <= 0) {
             throw new ProductNotExist("product not enough");
         }
-        Order order = null;
-        if (user.getWallet().getBalance() >= product.getProductPrice() && product.getProductExist() > 0) {
+        Long pay = user.getWallet().getBalance() - (product.getProductPrice() * orderRequestModel.getProductCount());
 
-            Long pay = user.getWallet().getBalance() - product.getProductPrice();
+        Wallet wallet = walletService.findById(user.getWallet().getId());
+        wallet.setBalance(pay);
 
-            Wallet wallet = walletService.findById(user.getWallet().getId());
-            wallet.setBalance(pay);
+        Long buy = product.getProductExist() - orderRequestModel.getProductCount();
 
-            Long buy = product.getProductExist() - 1;
-
-            product.setProductExist(buy);
-
-            order = Order.orderBuilder().product(product).user(user).build();
+        product.setProductExist(buy);
+        if (newOrder.getUser().getWallet().getBalance() < 0) {
+            throw new OrderAddFailException("you cant add order because after add order Your account balance will be negative");
         }
+        OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(newOrder).build();
+        orderRepository.save(newOrder);
 
-        if (order == null) {
-            throw new OrderAddFailException("order value is false");
-        }
-
-        OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(order).build();
-        orderRepository.save(order);
         return orderResponseModel;
     }
 
@@ -119,10 +114,11 @@ public class OrderService implements OrderInt {
 
         Product buyproduct = productRepository.findById(order.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
 
-        Long backMoney = order.getUser().getWallet().getBalance() + buyproduct.getProductPrice();
+        Long backMoney = order.getUser().getWallet().getBalance() + (buyproduct.getProductPrice() * order.getProductCount());
+
         buyWallet.setBalance(backMoney);
 
-        Long backProduct = order.getProduct().getProductExist() + 1;
+        Long backProduct = order.getProduct().getProductExist() + order.getProductCount();
 
         buyproduct.setProductExist(backProduct);
         productRepository.save(buyproduct);

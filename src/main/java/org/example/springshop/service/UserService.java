@@ -28,7 +28,7 @@ public class UserService implements UserInt {
         this.jwtService = jwtService;
     }
 
-    //for MD5
+
 
 
     public List<UserResponseModel> userList() {
@@ -51,9 +51,12 @@ public class UserService implements UserInt {
         userRequestModel.setPassword(hashedPassword);
 
         User user = User.userBuilder().userRequestModel(userRequestModel).userRole(userRequestModel.getUserRole()).build();
+        userRepository.save(user);
         Wallet wallet = Wallet.userWalletClass().user(user).build();
         walletService.walletAdd(wallet);
-        return userRepository.save(user);
+        user.setWallet(wallet);
+        return user;
+
     }
 
     public void userDelete(Long id) {
@@ -66,12 +69,11 @@ public class UserService implements UserInt {
         String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
 
         User userPass = userRepository.findByName(userRequestModel.getName()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        String token = null;
         if (hashedPassword.equals(userPass.getPassword())) {
-            jwtService.generateToken(userRequestModel.getName());
+            token = jwtService.generateToken(userRequestModel.getName());
         }
-
-
-        return "welcome to site";
+        return "welcome to site/" + token;
 
     }
 

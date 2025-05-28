@@ -23,9 +23,12 @@ public class Order {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
+    private Long productCount;
+
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
-    public Order(User user, Product product) {
+    public Order(User user, Product product, Long productCount) {
         this.user = user;
         this.product = product;
+        this.productCount = productCount;
     }
 }

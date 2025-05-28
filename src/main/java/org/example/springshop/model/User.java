@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
-import org.springframework.stereotype.Component;
 
 @Data
 @Entity
@@ -30,7 +28,7 @@ public class User {
     @Column(name = "USER_ROLE")
     private UserRole role;
 
-    @Builder(builderClassName = "UserClass",builderMethodName ="userBuilder" )
+    @Builder(builderClassName = "UserClass", builderMethodName = "userBuilder")
     public User(UserRequestModel userRequestModel, Wallet wallet, UserRole userRole) {
         this.name = userRequestModel.getName();
         this.password = userRequestModel.getPassword();

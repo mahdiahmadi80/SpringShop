@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.dto.requestmodel.WalletRequestModel;
 
 @Data
 @Entity
@@ -24,14 +23,7 @@ public class Wallet {
     @Column(name = "BALANCE")
     private Long balance;
 
-    @Builder(builderMethodName = "walletClass" , builderClassName ="WalletClass" )
-    public Wallet(WalletRequestModel walletRequestModel, User user) {
-        this.id = walletRequestModel.getId();
-        this.balance = walletRequestModel.getBalance();
-        this.userId = user;
-    }
-
-    @Builder(builderMethodName = "userWalletClass" , builderClassName ="UserWalletClass" )
+    @Builder(builderMethodName = "userWalletClass", builderClassName = "UserWalletClass")
     public Wallet(User user) {
         this.balance = 0L;
         this.userId = user;

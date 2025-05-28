@@ -15,7 +15,4 @@ public class WalletRequestModel {
     private Long userId;
     @JsonProperty("balance")
     private Long balance;
-
-
-
 }

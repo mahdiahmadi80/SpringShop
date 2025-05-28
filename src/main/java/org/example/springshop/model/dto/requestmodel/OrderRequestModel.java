@@ -15,4 +15,6 @@ public class OrderRequestModel {
     private Long Userid;
     @JsonProperty("product_id")
     private Long productid;
+    @JsonProperty("product_count")
+    private Long productCount;
 }

@@ -20,6 +20,11 @@ public class OrderResponseModel {
     private Long productId;
     @JsonProperty("product_name")
     private String productName;
+    @JsonProperty("product_count")
+    private Long productCount;
+
+    @JsonProperty("price_of_order")
+    private Long price_of_order;
 
     @Builder
     public OrderResponseModel(Order order) {
@@ -28,5 +33,7 @@ public class OrderResponseModel {
         this.userName = order.getUser().getName();
         this.productId = order.getProduct().getId();
         this.productName = order.getProduct().getProductName();
+        this.productCount = order.getProductCount();
+        this.price_of_order = order.getProductCount() * order.getProduct().getProductPrice();
     }
 }
