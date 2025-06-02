@@ -12,9 +12,9 @@ public class ProductRequestModel {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("product_name")
-    private String productName;
+    private String name;
     @JsonProperty("product_price")
-    private Long productPrice;
+    private Long price;
     @JsonProperty("product_exist")
-    private Long productExist;
+    private Long quantity;
 }

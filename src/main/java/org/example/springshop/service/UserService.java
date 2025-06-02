@@ -1,6 +1,7 @@
 package org.example.springshop.service;
 
 import org.example.springshop.exception.userException.UserNotFoundException;
+import org.example.springshop.exception.userException.VerifyException;
 import org.example.springshop.model.User;
 import org.example.springshop.model.Wallet;
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
@@ -28,9 +29,6 @@ public class UserService implements UserInt {
         this.jwtService = jwtService;
     }
 
-
-
-
     public List<UserResponseModel> userList() {
         List<UserResponseModel> userResponseModels = new ArrayList<>();
         userRepository.findAll().forEach(user -> {
@@ -52,29 +50,41 @@ public class UserService implements UserInt {
 
         User user = User.userBuilder().userRequestModel(userRequestModel).userRole(userRequestModel.getUserRole()).build();
         userRepository.save(user);
+
         Wallet wallet = Wallet.userWalletClass().user(user).build();
         walletService.walletAdd(wallet);
+
         user.setWallet(wallet);
         return user;
+    }
 
+    @Override
+    public User userEdit(Long id, UserRequestModel userRequestModel) {
+        User editUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user not found"));
+        String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
+        editUser.setName(userRequestModel.getName());
+        editUser.setPassword(hashedPassword);
+        editUser.setRole(userRequestModel.getUserRole());
+        return userRepository.save(editUser);
     }
 
     public void userDelete(Long id) {
         userRepository.deleteById(id);
     }
 
-
     public String verify(UserRequestModel userRequestModel) {
-
         String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
-
         User userPass = userRepository.findByName(userRequestModel.getName()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        String token = null;
-        if (hashedPassword.equals(userPass.getPassword())) {
-            token = jwtService.generateToken(userRequestModel.getName());
-        }
-        return "welcome to site/" + token;
 
+        return checkPassword(hashedPassword, userPass, userRequestModel);
     }
-
+    public String checkPassword(String hashedPassword, User user, UserRequestModel userRequestModel) {
+        String token;
+        if (hashedPassword.equals(user.getPassword())) {
+            token = jwtService.generateToken(userRequestModel.getName());
+        } else {
+            throw new VerifyException("password invalid");
+        }
+        return token;
+    }
 }

@@ -4,7 +4,6 @@ import org.example.springshop.model.Order;
 import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
 import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
 import org.example.springshop.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -32,8 +32,8 @@ public class OrderResponseModel {
         this.userId = order.getUser().getId();
         this.userName = order.getUser().getName();
         this.productId = order.getProduct().getId();
-        this.productName = order.getProduct().getProductName();
-        this.productCount = order.getProductCount();
-        this.price_of_order = order.getProductCount() * order.getProduct().getProductPrice();
+        this.productName = order.getProduct().getName();
+        this.productCount = order.getCount();
+        this.price_of_order = order.getCount() * order.getProduct().getPrice();
     }
 }

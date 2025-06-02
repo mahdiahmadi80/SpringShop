@@ -22,8 +22,6 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @EnableWebSecurity
-
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -69,12 +67,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("user/add", "user/login").permitAll()
-//                        .requestMatchers("product/**").hasAnyRole("OWNER","ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session ->

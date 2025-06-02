@@ -8,14 +8,12 @@ import org.example.springshop.repository.WalletRepository;
 import org.example.springshop.service.serviceint.WalletInt;
 import org.springframework.stereotype.Service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 
 public class WalletService implements WalletInt {
-
     private final WalletRepository walletRepository;
 
     public WalletService(WalletRepository walletRepository) {
@@ -39,21 +37,15 @@ public class WalletService implements WalletInt {
 
     @Override
     public WalletResponseModel showBalance(Long id) {
-
         Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
-
         return WalletResponseModel.builder().wallet(wallet).build();
     }
 
     @Override
     public void deposit(Long id, WalletRequestModel walletRequestModel) {
-
         Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
-
         wallet.setBalance(walletRequestModel.getBalance());
-
         walletRepository.save(wallet);
-
     }
 
     @Override

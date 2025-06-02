@@ -41,7 +41,12 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public User userEdit(@PathVariable Long id, @RequestBody UserRequestModel userRequestModel) {
+        return userService.userEdit(id,userRequestModel);
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(@RequestBody UserRequestModel userRequestModel) {
         return userService.verify(userRequestModel);
     }

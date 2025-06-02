@@ -11,39 +11,31 @@ import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.Order;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.User;
-import org.example.springshop.model.Wallet;
 import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
 import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
 import org.example.springshop.repository.OrderRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.repository.UserRepository;
-import org.example.springshop.service.serviceint.OrderInt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class OrderService implements OrderInt {
+public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final UserService userService;
-    private final WalletService walletService;
     private final UserRepository userRepository;
 
-    public OrderService(OrderRepository orderRepository, ProductRepository productRepository, UserService userService, WalletService walletService, UserRepository userRepository) {
+    public OrderService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
-        this.userService = userService;
-        this.walletService = walletService;
         this.userRepository = userRepository;
     }
 
-    @Override
     public List<OrderResponseModel> orderList() {
         List<OrderResponseModel> orderResponseModels = new ArrayList<>();
-
         orderRepository.findAll().forEach(order -> {
             OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(order).build();
             orderResponseModels.add(orderResponseModel);
@@ -52,77 +44,86 @@ public class OrderService implements OrderInt {
     }
 
     @Transactional
-    @Override
     @SneakyThrows
     public OrderResponseModel orderAdd(OrderRequestModel orderRequestModel) {
-        User user = userRepository.findById(orderRequestModel.getUserid()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Product product = productRepository.findById(orderRequestModel.getProductid()).orElseThrow(() -> new ProductNotExist("product not enough"));
+        User user = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Product product = productRepository.findById(orderRequestModel.getProductId()).orElseThrow(() -> new ProductNotExist("product not enough"));
+        Long count = orderRequestModel.getCount();
 
-        Order newOrder = Order.orderBuilder().user(user).product(product).productCount(orderRequestModel.getProductCount()).build();
+        walletCheck(user, totalPrice(product, count));
+        quantityCheck(product, count);
+        newQuantity(product, count);
+        newBalance(user, totalPrice(product, count));
 
-        if (user.getWallet().getBalance() < product.getProductPrice()) {
-            throw new NotEnoughMoneyException(" your wallet Balance is enough for buy this product");
-        }
-        if (orderRequestModel.getProductCount() > product.getProductExist()) {
-            throw new ProductNotExist("your count over than exist");
-        }
-        if (product.getProductExist() <= 0) {
-            throw new ProductNotExist("product not enough");
-        }
-        Long pay = user.getWallet().getBalance() - (product.getProductPrice() * orderRequestModel.getProductCount());
-
-        Wallet wallet = walletService.findById(user.getWallet().getId());
-        wallet.setBalance(pay);
-
-        Long buy = product.getProductExist() - orderRequestModel.getProductCount();
-
-        product.setProductExist(buy);
-        if (newOrder.getUser().getWallet().getBalance() < 0) {
-            throw new OrderAddFailException("you cant add order because after add order Your account balance will be negative");
-        }
+        Order newOrder = Order.orderBuilder().user(user).product(product).count(count).build();
         OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(newOrder).build();
         orderRepository.save(newOrder);
-
         return orderResponseModel;
     }
 
-    @Override
-    public Order orderEdit(Long id, OrderRequestModel orderRequestModel) {
-        Order oldOrder = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
+    public Long totalPrice(Product product, Long count) {
+        return product.getPrice() * count;
+    }
 
-        User newUser = userRepository.findById(orderRequestModel.getUserid()).orElseThrow(() -> new UserNotFoundException("user not found"));
-
-        Product newProduct = productRepository.findById(orderRequestModel.getProductid()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-
-        oldOrder.setUser(newUser);
-        oldOrder.setProduct(newProduct);
-
-        Order newOrder = null;
-        if (newUser.getWallet().getBalance() > newProduct.getProductPrice() && newProduct.getProductExist() > 0) {
-            newOrder = orderRepository.save(oldOrder);
+    public void quantityCheck(Product product, Long count) {
+        if (count > product.getQuantity()) {
+            throw new ProductNotExist("your count over than quantity");
         }
+    }
 
-        return orderRepository.save(newOrder);
+    public void walletCheck(User user, Long totalPrice) {
+        long walletBalance = user.getWallet().getBalance() - totalPrice;
+        if (walletBalance < 0) {
+            throw new NotEnoughMoneyException("your balance not enough");
+        }
+    }
+
+    public void newQuantity(Product product, Long count) {
+        product.setQuantity(product.getQuantity() - count);
+    }
+
+    public void newBalance(User user, Long totalPrice) {
+        user.getWallet().setBalance(user.getWallet().getBalance() - totalPrice);
     }
 
 
-    @Override
+    public Order orderEdit(Long id, OrderRequestModel orderRequestModel) {
+        Order editOrder = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
+        User newUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Product newProduct = productRepository.findById(orderRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
+
+        editOrderCheck(newUser, newProduct);
+
+        editOrder.setUser(newUser);
+        editOrder.setProduct(newProduct);
+
+        return orderRepository.save(editOrder);
+    }
+
+    private void editOrderCheck(User newUser, Product newProduct) {
+        if (newUser.getWallet().getBalance() < newProduct.getPrice() && newProduct.getQuantity() < 0) {
+            throw new OrderAddFailException("value is false");
+        }
+    }
+
+
     public void orderDelete(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
+        Product product = productRepository.findById(order.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
+        Long count = order.getCount();
 
-        Wallet buyWallet = walletService.findById(order.getUser().getWallet().getId());
-
-        Product buyproduct = productRepository.findById(order.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-
-        Long backMoney = order.getUser().getWallet().getBalance() + (buyproduct.getProductPrice() * order.getProductCount());
-
-        buyWallet.setBalance(backMoney);
-
-        Long backProduct = order.getProduct().getProductExist() + order.getProductCount();
-
-        buyproduct.setProductExist(backProduct);
-        productRepository.save(buyproduct);
-
+        backBalance(order, totalPrice(product, count));
+        product.setQuantity(backProduct(order));
+        productRepository.save(product);
         orderRepository.deleteById(id);
+    }
+
+    public void backBalance(Order order, Long totalPrice) {
+        Long balance = order.getUser().getWallet().getBalance() + totalPrice;
+        order.getUser().getWallet().setBalance(balance);
+    }
+
+    public Long backProduct(Order order) {
+        return order.getProduct().getQuantity() + order.getCount();
     }
 }

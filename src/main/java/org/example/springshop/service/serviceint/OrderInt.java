@@ -1,7 +1,6 @@
 package org.example.springshop.service.serviceint;
 
 import org.example.springshop.model.Order;
-import org.example.springshop.model.User;
 import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
 import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
 
@@ -13,7 +12,6 @@ public interface OrderInt {
     OrderResponseModel orderAdd(OrderRequestModel orderRequestModel);
 
     Order orderEdit(Long id, OrderRequestModel orderRequestModel);
-
 
 
     void orderDelete(Long id);

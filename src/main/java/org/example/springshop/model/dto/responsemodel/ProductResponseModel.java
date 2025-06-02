@@ -12,7 +12,7 @@ public class ProductResponseModel {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("product_name")
-    private String productName;
+    private String name;
     @JsonProperty("product_price")
     private Long productPrice;
     @JsonProperty("product_exist")
@@ -21,8 +21,8 @@ public class ProductResponseModel {
     @Builder
     public ProductResponseModel(Product product) {
         this.id = product.getId();
-        this.productName = product.getProductName();
-        this.productPrice = product.getProductPrice();
-        this.productExist = product.getProductExist();
+        this.name = product.getName();
+        this.productPrice = product.getPrice();
+        this.productExist = product.getQuantity();
     }
 }

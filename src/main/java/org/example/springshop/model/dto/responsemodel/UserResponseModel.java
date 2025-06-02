@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.User;
 import org.example.springshop.model.UserRole;
-import org.example.springshop.model.Wallet;
 
 @NoArgsConstructor
 @Getter

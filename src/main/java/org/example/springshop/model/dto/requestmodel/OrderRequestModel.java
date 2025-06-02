@@ -12,9 +12,9 @@ public class OrderRequestModel {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("user_id")
-    private Long Userid;
+    private Long userId;
     @JsonProperty("product_id")
-    private Long productid;
+    private Long productId;
     @JsonProperty("product_count")
-    private Long productCount;
+    private Long count;
 }

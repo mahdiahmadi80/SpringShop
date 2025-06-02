@@ -19,17 +19,17 @@ public class Product {
     @Column(name = "ID")
     private Long id;
     @Column(name = "PRODUCT_NAME")
-    private String productName;
+    private String name;
     @Column(name = "PRODUCT_PRICE")
-    private Long productPrice;
-    @Column(name = "PRODUCT_EXIST")
-    private Long productExist;
+    private Long price;
+    @Column(name = "PRODUCT_QUANTITY")
+    private Long quantity;
 
 
     @Builder(builderClassName = "ProductClass", builderMethodName = "productBuilder")
     public Product(ProductRequestModel request) {
-        this.productName = request.getProductName();
-        this.productPrice = request.getProductPrice();
-        this.productExist = request.getProductExist();
+        this.name = request.getName();
+        this.price = request.getPrice();
+        this.quantity = request.getQuantity();
     }
 }

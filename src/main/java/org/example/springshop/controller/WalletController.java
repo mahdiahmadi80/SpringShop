@@ -32,5 +32,4 @@ public class WalletController {
         walletService.deposit(id, walletRequestModel);
     }
 
-
 }

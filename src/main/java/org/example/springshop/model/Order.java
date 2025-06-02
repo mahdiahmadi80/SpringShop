@@ -22,13 +22,13 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
-
-    private Long productCount;
+    @Column(name = "COUNT")
+    private Long count;
 
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
-    public Order(User user, Product product, Long productCount) {
+    public Order(User user, Product product, Long count) {
         this.user = user;
         this.product = product;
-        this.productCount = productCount;
+        this.count = count;
     }
 }
