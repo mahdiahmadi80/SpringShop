@@ -38,7 +38,6 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public User userAdd(@RequestBody UserRequestModel userRequestModel) {
         return userService.userAdd(userRequestModel);
-
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)

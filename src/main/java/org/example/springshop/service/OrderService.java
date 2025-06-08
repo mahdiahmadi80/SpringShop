@@ -1,5 +1,4 @@
 package org.example.springshop.service;
-
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.example.springshop.exception.orderException.NotEnoughMoneyException;
@@ -17,7 +16,6 @@ import org.example.springshop.repository.OrderRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +47,10 @@ public class OrderService {
         User user = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         Product product = productRepository.findById(orderRequestModel.getProductId()).orElseThrow(() -> new ProductNotExist("product not enough"));
         Long count = orderRequestModel.getCount();
-
         walletCheck(user, totalPrice(product, count));
         quantityCheck(product, count);
         newQuantity(product, count);
         newBalance(user, totalPrice(product, count));
-
         Order newOrder = Order.orderBuilder().user(user).product(product).count(count).build();
         OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(newOrder).build();
         orderRepository.save(newOrder);
@@ -91,27 +87,21 @@ public class OrderService {
         Order editOrder = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
         User newUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         Product newProduct = productRepository.findById(orderRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-
         editOrderCheck(newUser, newProduct);
-
         editOrder.setUser(newUser);
         editOrder.setProduct(newProduct);
-
         return orderRepository.save(editOrder);
     }
-
     private void editOrderCheck(User newUser, Product newProduct) {
         if (newUser.getWallet().getBalance() < newProduct.getPrice() && newProduct.getQuantity() < 0) {
             throw new OrderAddFailException("value is false");
         }
     }
 
-
     public void orderDelete(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
         Product product = productRepository.findById(order.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
         Long count = order.getCount();
-
         backBalance(order, totalPrice(product, count));
         product.setQuantity(backProduct(order));
         productRepository.save(product);

@@ -1,5 +1,4 @@
 package org.example.springshop.service;
-
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.exception.userException.VerifyException;
 import org.example.springshop.model.User;
@@ -10,7 +9,6 @@ import org.example.springshop.repository.UserRepository;
 import org.example.springshop.service.securityservice.JWTService;
 import org.example.springshop.service.serviceint.UserInt;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,13 +45,10 @@ public class UserService implements UserInt {
     public User userAdd(UserRequestModel userRequestModel) {
         String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
         userRequestModel.setPassword(hashedPassword);
-
         User user = User.userBuilder().userRequestModel(userRequestModel).userRole(userRequestModel.getUserRole()).build();
         userRepository.save(user);
-
         Wallet wallet = Wallet.userWalletClass().user(user).build();
         walletService.walletAdd(wallet);
-
         user.setWallet(wallet);
         return user;
     }
@@ -75,9 +70,9 @@ public class UserService implements UserInt {
     public String verify(UserRequestModel userRequestModel) {
         String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
         User userPass = userRepository.findByName(userRequestModel.getName()).orElseThrow(() -> new UserNotFoundException("user not found"));
-
         return checkPassword(hashedPassword, userPass, userRequestModel);
     }
+
     public String checkPassword(String hashedPassword, User user, UserRequestModel userRequestModel) {
         String token;
         if (hashedPassword.equals(user.getPassword())) {

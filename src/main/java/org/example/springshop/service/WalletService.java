@@ -1,5 +1,4 @@
 package org.example.springshop.service;
-
 import org.example.springshop.exception.walletException.WalletNotFoundException;
 import org.example.springshop.model.Wallet;
 import org.example.springshop.model.dto.requestmodel.WalletRequestModel;
@@ -7,7 +6,6 @@ import org.example.springshop.model.dto.responsemodel.WalletResponseModel;
 import org.example.springshop.repository.WalletRepository;
 import org.example.springshop.service.serviceint.WalletInt;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
