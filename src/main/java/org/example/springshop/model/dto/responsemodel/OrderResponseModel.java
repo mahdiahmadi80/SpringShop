@@ -22,7 +22,6 @@ public class OrderResponseModel {
     private String productName;
     @JsonProperty("product_count")
     private Long productCount;
-
     @JsonProperty("price_of_order")
     private Long price_of_order;
 
@@ -31,9 +30,6 @@ public class OrderResponseModel {
         this.id = order.getId();
         this.userId = order.getUser().getId();
         this.userName = order.getUser().getName();
-        this.productId = order.getProduct().getId();
-        this.productName = order.getProduct().getName();
-        this.productCount = order.getCount();
-        this.price_of_order = order.getCount() * order.getProduct().getPrice();
+
     }
 }

@@ -1,4 +1,5 @@
 package org.example.springshop.service;
+
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.example.springshop.exception.orderException.NotEnoughMoneyException;
@@ -16,6 +17,7 @@ import org.example.springshop.repository.OrderRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class OrderService {
         quantityCheck(product, count);
         newQuantity(product, count);
         newBalance(user, totalPrice(product, count));
-        Order newOrder = Order.orderBuilder().user(user).product(product).count(count).build();
+        Order newOrder = Order.orderBuilder().user(user).build();
         OrderResponseModel orderResponseModel = OrderResponseModel.builder().order(newOrder).build();
         orderRepository.save(newOrder);
         return orderResponseModel;
@@ -62,7 +64,7 @@ public class OrderService {
     }
 
     public void quantityCheck(Product product, Long count) {
-        if (count > product.getQuantity()) {
+        if (count > product.getInventory()) {
             throw new ProductNotExist("your count over than quantity");
         }
     }
@@ -70,12 +72,12 @@ public class OrderService {
     public void walletCheck(User user, Long totalPrice) {
         long walletBalance = user.getWallet().getBalance() - totalPrice;
         if (walletBalance < 0) {
-            throw new NotEnoughMoneyException("your balance not enough");
+            throw new NotEnoughMoneyException();
         }
     }
 
     public void newQuantity(Product product, Long count) {
-        product.setQuantity(product.getQuantity() - count);
+        product.setInventory(product.getInventory() - count);
     }
 
     public void newBalance(User user, Long totalPrice) {
@@ -83,29 +85,28 @@ public class OrderService {
     }
 
 
-    public Order orderEdit(Long id, OrderRequestModel orderRequestModel) {
+    public OrderResponseModel orderEdit(Long id, OrderRequestModel orderRequestModel) {
         Order editOrder = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
         User newUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         Product newProduct = productRepository.findById(orderRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
         editOrderCheck(newUser, newProduct);
         editOrder.setUser(newUser);
-        editOrder.setProduct(newProduct);
-        return orderRepository.save(editOrder);
+
+        orderRepository.save(editOrder);
+        return OrderResponseModel.builder().order(editOrder).build();
     }
+
     private void editOrderCheck(User newUser, Product newProduct) {
-        if (newUser.getWallet().getBalance() < newProduct.getPrice() && newProduct.getQuantity() < 0) {
+        if (newUser.getWallet().getBalance() < newProduct.getPrice() && newProduct.getInventory() < 0) {
             throw new OrderAddFailException("value is false");
         }
     }
 
-    public void orderDelete(Long id) {
+    public String orderDelete(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
-        Product product = productRepository.findById(order.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-        Long count = order.getCount();
-        backBalance(order, totalPrice(product, count));
-        product.setQuantity(backProduct(order));
-        productRepository.save(product);
-        orderRepository.deleteById(id);
+
+
+        return "your order deleted";
     }
 
     public void backBalance(Order order, Long totalPrice) {
@@ -114,6 +115,6 @@ public class OrderService {
     }
 
     public Long backProduct(Order order) {
-        return order.getProduct().getQuantity() + order.getCount();
+        return 2L+3L;
     }
 }

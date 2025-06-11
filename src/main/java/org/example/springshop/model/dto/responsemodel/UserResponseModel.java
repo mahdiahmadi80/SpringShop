@@ -17,8 +17,8 @@ public class UserResponseModel {
     private String name;
     @JsonProperty("password")
     private String password;
-    @JsonProperty("wallet")
-    private Long wallet;
+//    @JsonProperty("wallet")
+//    private Long wallet;
     @JsonProperty("user_role")
     private UserRole userRole;
 
@@ -27,7 +27,7 @@ public class UserResponseModel {
         this.id = user.getId();
         this.name = user.getName();
         this.password= user.getPassword();
-        this.wallet = user.getWallet().getId();
+//        this.wallet = user.getWallet().getId();
         this.userRole= user.getRole();
     }
 }

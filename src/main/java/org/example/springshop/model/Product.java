@@ -22,14 +22,14 @@ public class Product {
     private String name;
     @Column(name = "PRODUCT_PRICE")
     private Long price;
-    @Column(name = "PRODUCT_QUANTITY")
-    private Long quantity;
+    @Column(name = "PRODUCT_INVENTORY")
+    private Long inventory;
 
 
     @Builder(builderClassName = "ProductClass", builderMethodName = "productBuilder")
     public Product(ProductRequestModel request) {
         this.name = request.getName();
         this.price = request.getPrice();
-        this.quantity = request.getQuantity();
+        this.inventory = request.getInventory();
     }
 }

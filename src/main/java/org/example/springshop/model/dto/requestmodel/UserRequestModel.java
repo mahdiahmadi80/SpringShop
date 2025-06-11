@@ -18,4 +18,5 @@ public class UserRequestModel {
     private String password;
     @JsonProperty("user_role")
     private UserRole userRole;
+
 }

@@ -15,14 +15,14 @@ public class ProductResponseModel {
     private String name;
     @JsonProperty("product_price")
     private Long productPrice;
-    @JsonProperty("product_exist")
-    private Long productExist;
+    @JsonProperty("inventory")
+    private Long inventory;
 
     @Builder
     public ProductResponseModel(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.productPrice = product.getPrice();
-        this.productExist = product.getQuantity();
+        this.inventory = product.getInventory();
     }
 }

@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tbl_ORDER")
+@Table(name = "TBL_ORDERS")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +21,14 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
-    @Column(name = "COUNT")
-    private Long count;
+
+    @OneToMany
+    private List<OrderItems> orderItems;
 
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
-    public Order(User user, Product product, Long count) {
+    public Order(User user, List<OrderItems> orderItems) {
         this.user = user;
-        this.product = product;
-        this.count = count;
+        this.orderItems = orderItems;
+
     }
 }

@@ -15,6 +15,6 @@ public class ProductRequestModel {
     private String name;
     @JsonProperty("product_price")
     private Long price;
-    @JsonProperty("product_exist")
-    private Long quantity;
+    @JsonProperty("product_inventory")
+    private Long inventory;
 }

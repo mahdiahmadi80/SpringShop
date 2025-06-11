@@ -27,8 +27,8 @@ public class WalletController {
     }
 
     @RequestMapping(value = "/deposit/{id}", method = RequestMethod.POST)
-    public void deposit(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
-        walletService.deposit(id, walletRequestModel);
+    public String deposit(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
+        return walletService.deposit(id, walletRequestModel);
     }
 
 }

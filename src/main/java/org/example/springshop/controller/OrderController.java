@@ -28,7 +28,7 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public Order orderEdit(@PathVariable Long id, @RequestBody OrderRequestModel orderRequestModel) {
+    public OrderResponseModel orderEdit(@PathVariable Long id, @RequestBody OrderRequestModel orderRequestModel) {
         return orderService.orderEdit(id, orderRequestModel);
     }
 

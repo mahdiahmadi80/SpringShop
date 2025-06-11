@@ -1,17 +1,18 @@
 package org.example.springshop.service;
+
 import org.example.springshop.exception.productException.ProductNotExist;
 import org.example.springshop.exception.productException.ProductValueException;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.example.springshop.model.dto.responsemodel.ProductResponseModel;
 import org.example.springshop.repository.ProductRepository;
-import org.example.springshop.service.serviceint.ProductInt;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProductService implements ProductInt {
+public class ProductService {
 
     private final ProductRepository productRepository;
 
@@ -19,7 +20,7 @@ public class ProductService implements ProductInt {
         this.productRepository = productRepository;
     }
 
-    @Override
+
     public List<ProductResponseModel> productList() {
         List<ProductResponseModel> productResponseModels = new ArrayList<>();
         productRepository.findAll().forEach(product -> {
@@ -29,28 +30,31 @@ public class ProductService implements ProductInt {
         return productResponseModels;
     }
 
-    @Override
-    public Product addProduct(ProductRequestModel requestModel) {
+    public ProductResponseModel addProduct(ProductRequestModel requestModel) {
         Product newProduct;
         try {
             newProduct = Product.productBuilder().request(requestModel).build();
         } catch (ProductValueException e) {
             throw new ProductValueException("value is false");
         }
-        return productRepository.save(newProduct);
+        productRepository.save(newProduct);
+        return ProductResponseModel.builder().product(newProduct).build();
     }
 
-    @Override
-    public Product editProduct(Long id, ProductRequestModel productRequestModel) {
+    public ProductResponseModel editProduct(Long id, ProductRequestModel productRequestModel) {
         Product oldProduct = productRepository.findById(id).orElseThrow(() -> new ProductNotExist("product not found"));
         oldProduct.setName(productRequestModel.getName());
         oldProduct.setPrice(productRequestModel.getPrice());
-        oldProduct.setQuantity(productRequestModel.getQuantity());
-        return productRepository.save(oldProduct);
+        oldProduct.setInventory(productRequestModel.getInventory());
+        productRepository.save(oldProduct);
+        return ProductResponseModel.builder().product(oldProduct).build();
     }
 
-    @Override
-    public void deleteProduct(Long id) {
+    public String deleteProduct(Long id) {
+
+
         productRepository.deleteById(id);
+
+        return "product is deleted";
     }
 }

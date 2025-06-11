@@ -23,7 +23,7 @@ public class Wallet {
     @Column(name = "BALANCE")
     private Long balance;
 
-    @Builder(builderMethodName = "userWalletClass", builderClassName = "UserWalletClass")
+    @Builder(builderClassName = "UserWalletClass", builderMethodName = "userWalletClass")
     public Wallet(User user) {
         this.balance = 0L;
         this.userId = user;
