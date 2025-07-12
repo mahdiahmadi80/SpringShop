@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class WalletRequestModel {
-    @JsonProperty("Id")
+    @JsonProperty("id")
     private Long id;
     @JsonProperty("userid")
     private Long userId;

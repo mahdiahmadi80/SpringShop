@@ -7,27 +7,40 @@ import lombok.NoArgsConstructor;
 import org.example.springshop.model.User;
 import org.example.springshop.model.UserRole;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 public class UserResponseModel {
-
     @JsonProperty("Id")
     private Long id;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("lastname")
+    private String lastName;
     @JsonProperty("password")
     private String password;
-//    @JsonProperty("wallet")
-//    private Long wallet;
+    @JsonProperty("email")
+    private String email;
+    @JsonProperty("phoneNumber")
+    private String phoneNumber;
+    @JsonProperty("nationalCode")
+    private String nationalCode;
+    @JsonProperty("profilePicture")
+    private String profilePicture;
     @JsonProperty("user_role")
     private UserRole userRole;
 
+
     @Builder
-    public UserResponseModel(User user ) {
+    public UserResponseModel(User user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.password= user.getPassword();
-//        this.wallet = user.getWallet().getId();
-        this.userRole= user.getRole();
+        this.lastName = user.getLastName();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.nationalCode = user.getNationalCode();
+        this.profilePicture = user.getProfilePicture();
+        this.userRole = user.getRole();
+
     }
 }

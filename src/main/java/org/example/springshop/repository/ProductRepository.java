@@ -2,8 +2,23 @@ package org.example.springshop.repository;
 
 import org.example.springshop.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    @Query(value = "select * from tbl_product where product_name like %:name%", nativeQuery = true)
+    List<Product> searchByProductName(String name);
+
+    @Query(value = "select * from tbl_product where PRODUCT_PRICE >= :price", nativeQuery = true)
+    List<Product> searchByProductPrice(Long price);
+
+    @Query(value = "select * from tbl_product where product_price between :minPrice and :maxPrice", nativeQuery = true)
+    List<Product> searchByPriceBetween(Long minPrice, Long maxPrice);
+//
+//    @Query(value = "SELECT* from tbl_product LEFT join tbl_category", nativeQuery = true)
+//    List<Product> listByCategory(String category);
+
 }

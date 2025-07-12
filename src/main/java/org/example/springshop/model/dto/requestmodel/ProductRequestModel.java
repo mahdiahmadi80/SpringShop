@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.springshop.model.Comment;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,10 +14,18 @@ import lombok.NoArgsConstructor;
 public class ProductRequestModel {
     @JsonProperty("id")
     private Long id;
-    @JsonProperty("product_name")
+    @JsonProperty("name")
     private String name;
-    @JsonProperty("product_price")
+    @JsonProperty("price")
     private Long price;
-    @JsonProperty("product_inventory")
+    @JsonProperty("inventory")
     private Long inventory;
+    @JsonProperty("description")
+    private String description;
+    @JsonProperty("image")
+    private String image;
+    @JsonProperty("comments")
+    private List<Comment> comments;
+    @JsonProperty("category")
+    private Long category;
 }

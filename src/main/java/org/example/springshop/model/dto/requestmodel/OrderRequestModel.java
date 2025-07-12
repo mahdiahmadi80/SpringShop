@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -13,8 +15,11 @@ public class OrderRequestModel {
     private Long id;
     @JsonProperty("user_id")
     private Long userId;
-    @JsonProperty("product_id")
-    private Long productId;
-    @JsonProperty("product_count")
-    private Long count;
+@JsonProperty("orderItem")
+    private List<OrderItemsRequestModel> orderItems;
+
+//    @JsonProperty("product_id")
+//    private Long productId;
+//    @JsonProperty("product_count")
+//    private Long count;
 }

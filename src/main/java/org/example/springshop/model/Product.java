@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
-import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -24,12 +25,26 @@ public class Product {
     private Long price;
     @Column(name = "PRODUCT_INVENTORY")
     private Long inventory;
+    @Column(name = "DESCRIPTION")
+    private String description;
+    @Column(name = "IMAGE")
+    private String image;
 
+    @OneToMany
+    @Column(name = "COMMENTS")
+    private List<Comment> comments;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Builder(builderClassName = "ProductClass", builderMethodName = "productBuilder")
-    public Product(ProductRequestModel request) {
+    public Product(ProductRequestModel request, Category category) {
         this.name = request.getName();
         this.price = request.getPrice();
         this.inventory = request.getInventory();
+        this.description = request.getDescription();
+        this.comments = request.getComments();
+        this.image = request.getImage();
+        this.category = category;
     }
 }

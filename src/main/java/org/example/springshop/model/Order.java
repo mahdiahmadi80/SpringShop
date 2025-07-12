@@ -18,17 +18,19 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+    @Column(name = "TOTALAMOUNT")
+    private Long totalAmount;
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-
-    @OneToMany
+//    orphanRemoval = true for down
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<OrderItems> orderItems;
 
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
     public Order(User user, List<OrderItems> orderItems) {
         this.user = user;
         this.orderItems = orderItems;
-
+//        this.address = address;
     }
 }

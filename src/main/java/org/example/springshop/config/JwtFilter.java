@@ -21,6 +21,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final ApplicationContext context;
+
     public JwtFilter(JWTService jwtService, ApplicationContext context) {
         this.jwtService = jwtService;
         this.context = context;

@@ -1,11 +1,8 @@
 package org.example.springshop.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.springshop.model.User;
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
-import org.example.springshop.model.dto.requestmodel.UserRequestModelSignUp;
 import org.example.springshop.model.dto.responsemodel.UserResponseModel;
-import org.example.springshop.model.dto.responsemodel.UserResponseModelsignUp;
 import org.example.springshop.service.UserService;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
@@ -39,19 +36,39 @@ public class UserController {
 
     @DeleteMapping(value = "/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return "user is deleted";
+        return userService.deleteUser(id);
     }
 
     @RequestMapping(value = "/signup/{id}", method = RequestMethod.POST)
-    public UserResponseModelsignUp signupUser(@PathVariable Long id, @RequestBody UserRequestModelSignUp userRequestModelSignUp) {
-        return userService.signUpUser(id, userRequestModelSignUp);
+    public UserResponseModel signupUser(@PathVariable Long id, @RequestBody UserRequestModel userRequestModel) {
+        return userService.signUpUser(id, userRequestModel);
     }
 
-    @RequestMapping(value = ("/{id}"), method = RequestMethod.GET)
-    public User searchUser(@PathVariable Long id) {
-        return userService.searchUser(id);
+    @RequestMapping(value = "/search/id/{id}", method = RequestMethod.GET)
+    public UserResponseModel searchUserById(@PathVariable Long id) {
+        return userService.searchUserById(id);
     }
+
+    @RequestMapping(value = "/search/nationalcode/{nationalCode}", method = RequestMethod.GET)
+    public UserResponseModel searchUserByNationalCode(@PathVariable String nationalCode) {
+        return userService.searchByNationalCode(nationalCode);
+    }
+
+    @RequestMapping(value = "/search/email/{email}", method = RequestMethod.GET)
+    public UserResponseModel searchByEmail(@PathVariable String email) {
+        return userService.searchByEmail(email);
+    }
+
+    @RequestMapping(value = "/search/role/{role}", method = RequestMethod.GET)
+    public List<UserResponseModel> searchByRole(@PathVariable Long role) {
+        return userService.searchUserByRole(role);
+    }
+
+//    @RequestMapping(value = "/profile/{id}")
+//    public UserResponseModel uploadProfilePicture(@PathVariable Long id, @RequestBody String pictureUrl) {
+//        return userService.uploadProfilePicture(id, pictureUrl);
+//
+//    }
 
     @RequestMapping(value = "/csrf-token", method = RequestMethod.GET)
     public CsrfToken getcsrfToken(HttpServletRequest request) {
@@ -62,4 +79,5 @@ public class UserController {
     public String login(@RequestBody UserRequestModel userRequestModel) {
         return userService.verify(userRequestModel);
     }
+
 }

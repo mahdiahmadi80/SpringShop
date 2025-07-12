@@ -2,8 +2,10 @@ package org.example.springshop.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.springshop.model.dto.requestmodel.AddressRequestModel;
 
 @Data
 @Entity
@@ -21,6 +23,15 @@ public class Address {
     private String city;
     @Column(name = "NUMBER")
     private Long number;
-    @Column(name = "POSTNUMBER")
+    @Column(name = "POST_NUMBER")
     private Long postNumber;
+
+
+    @Builder(builderClassName = "AddressClass", builderMethodName = "addressBuilder")
+    public Address(AddressRequestModel addressRequestModel) {
+        this.country = addressRequestModel.getCountry();
+        this.city = addressRequestModel.getCity();
+        this.number = addressRequestModel.getNumber();
+        this.postNumber = addressRequestModel.getPostNumber();
+    }
 }

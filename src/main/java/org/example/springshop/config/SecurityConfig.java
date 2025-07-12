@@ -32,7 +32,6 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-
     public static String generateMD5Hash(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -47,7 +46,6 @@ public class SecurityConfig {
             throw new RuntimeException(e);
         }
     }
-
 
     //for MD5
     @Bean

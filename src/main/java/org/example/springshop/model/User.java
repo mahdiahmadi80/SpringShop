@@ -1,12 +1,12 @@
 package org.example.springshop.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
-import org.example.springshop.model.dto.requestmodel.UserRequestModelSignUp;
 
 @Data
 @Entity
@@ -24,43 +24,43 @@ public class User {
     private String lastName;
     @Column(name = "PASSWORD")
     private String password;
-    @Column(name = "PHONENUMBER")
-    private Long phoneNumber;
-    @Column(name = "NATIONALCODE")
-    private Long nationalCode;
+    @Nullable
+    @Column(name = "EMAIL")
+    private String email;
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
+    @Nullable
+    @Column(name = "NATIONAL_CODE")
+    private String nationalCode;
+    @Column(name = "PROFILE_PICTURE")
+    private String profilePicture;
     @OneToOne
     @JoinColumn(name = "WALLET_ID")
     private Wallet wallet;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "USER_ROLE")
     private UserRole role;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
+//    @Column(name = "Test")
+//    private String test ;
+
     @Builder(builderClassName = "UserClass", builderMethodName = "userBuilder")
-    public User(UserRequestModel userRequestModel, UserRole userRole) {
+    public User(UserRequestModel userRequestModel, Address address) {
         this.name = userRequestModel.getName();
+        this.lastName = String.valueOf(userRequestModel.getLastName());
         this.password = userRequestModel.getPassword();
+        this.email = String.valueOf(userRequestModel.getEmail());
+        this.phoneNumber = String.valueOf(userRequestModel.getPhoneNumber());
+        this.nationalCode = String.valueOf(userRequestModel.getNationalcode());
+        this.profilePicture = String.valueOf(userRequestModel.getProfilePicture());
         this.role = userRequestModel.getUserRole();
-
-    }
-
-    @Builder(builderClassName = "UserClass", builderMethodName = "userBuilderSignUp")
-    public User(UserRequestModelSignUp userRequestModelSignUp, Wallet wallet, Address address) {
-        this.lastName = userRequestModelSignUp.getLastName();
-        this.phoneNumber = userRequestModelSignUp.getPhoneNumber();
-        this.nationalCode = userRequestModelSignUp.getNationalCode();
-        this.wallet = wallet;
-        this.address = userRequestModelSignUp.getAddress();
+        this.address = address;
+//        this.test= String.valueOf(Optional.of(test));
     }
 
 }
-//FOUNDATIONS OF PROGRAMMING: FUNDAMENTALS
-//FOUNDATIONS OF PROGRAMMING: OBJECT-ORIENTED DESIGN
-//FOUNDATIONS OF PROGRAMMING: DATA STRUCTURES
-//FOUNDATIONS OF PROGRAMMING: REFACTORING CODE
-//FOUNDATIONS OF PROGRAMMING: CODE EFFICIENCY
-//FOUNDATIONS OF PROGRAMMING: DATABASES
-//FOUNDATIONS OF PROGRAMMING: TEST-DRIVEN DEVELOPMENT
+
 

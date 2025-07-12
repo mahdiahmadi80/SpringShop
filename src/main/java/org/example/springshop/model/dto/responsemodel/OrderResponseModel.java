@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.Order;
+import org.example.springshop.model.OrderItems;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,6 +19,8 @@ public class OrderResponseModel {
     private Long userId;
     @JsonProperty("user_name")
     private String userName;
+    //    @JsonProperty("user_address")
+//    private String userAddress;
     @JsonProperty("product_id")
     private Long productId;
     @JsonProperty("product_name")
@@ -24,12 +29,15 @@ public class OrderResponseModel {
     private Long productCount;
     @JsonProperty("price_of_order")
     private Long price_of_order;
+    @JsonProperty("orderItems")
+    private List<OrderItems> orderItems;
 
     @Builder
     public OrderResponseModel(Order order) {
         this.id = order.getId();
         this.userId = order.getUser().getId();
+//        this.userAddress= user.getAddress()
         this.userName = order.getUser().getName();
-
+        this.price_of_order = order.getTotalAmount();
     }
 }

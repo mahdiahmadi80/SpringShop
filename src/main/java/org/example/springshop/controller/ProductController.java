@@ -18,17 +18,17 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<ProductResponseModel> productList() {
-        return productService.productList();
+    public List<ProductResponseModel> listProduct() {
+        return productService.listProduct();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ProductResponseModel productAdd(@RequestBody ProductRequestModel productRequestModel) {
+    public ProductResponseModel addProduct(@RequestBody ProductRequestModel productRequestModel) {
         return productService.addProduct(productRequestModel);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public ProductResponseModel productEdit(@PathVariable Long id, @RequestBody ProductRequestModel productRequestModel) {
+    public ProductResponseModel editProduct(@PathVariable Long id, @RequestBody ProductRequestModel productRequestModel) {
         return productService.editProduct(id, productRequestModel);
     }
 
@@ -37,4 +37,28 @@ public class ProductController {
         return productService.deleteProduct(id);
     }
 
+    @RequestMapping(value = "/search/id/{id}", method = RequestMethod.GET)
+    public ProductResponseModel searchById(@PathVariable Long id) {
+        return productService.searchById(id);
+    }
+
+    @RequestMapping(value = "/search/name/{name}", method = RequestMethod.GET)
+    public List<ProductResponseModel> searchByName(@PathVariable String name) {
+        return productService.searchByProductName(name);
+    }
+
+    @RequestMapping(value = "/search/price/{price}", method = RequestMethod.GET)
+    public List<ProductResponseModel> searchByProductPrice(@PathVariable Long price) {
+        return productService.searchByProductPrice(price);
+    }
+
+    @RequestMapping(value = "/search/price", method = RequestMethod.GET)
+    public List<ProductResponseModel> searchByProductPriceBetween(@RequestParam Long minPrice, @RequestParam Long maxPrice) {
+        return productService.searchByPriceBetween(minPrice, maxPrice);
+    }
+
+//    @RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
+//    public List<ProductResponseModel> listCategory(@PathVariable String category) {
+//        return productService.listByCategory(category);
+//    }
 }

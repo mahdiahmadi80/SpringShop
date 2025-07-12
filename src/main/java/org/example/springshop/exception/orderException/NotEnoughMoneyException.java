@@ -5,4 +5,5 @@ public class NotEnoughMoneyException extends RuntimeException {
         super("user not found");
     }
 
+
 }

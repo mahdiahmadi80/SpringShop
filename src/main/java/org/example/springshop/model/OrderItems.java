@@ -2,14 +2,16 @@ package org.example.springshop.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tbl_orderitems")
+@Table(name = "TBL_ORDERITEMS")
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +21,18 @@ public class OrderItems {
     private Long quantity;
     @Column(name = "AMOUNT")
     private Long amount;
-
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
+    @ManyToOne
+    @JoinColumn(name = "ORDER_ID")
+    private Order order;
 
+    @Builder(builderClassName = "OrderItemsClass", builderMethodName = "orderItemsBuilder")
+    public OrderItems(OrderItemsRequestModel orderItemsRequestModel, Product product, Order order) {
+        this.quantity = orderItemsRequestModel.getQuantity();
+        this.amount = orderItemsRequestModel.getAmount();
+        this.product = product;
+        this.order = order;
+    }
 }
