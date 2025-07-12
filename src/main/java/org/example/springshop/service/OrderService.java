@@ -1,4 +1,5 @@
 package org.example.springshop.service;
+
 import jakarta.transaction.Transactional;
 import org.example.springshop.exception.orderException.NotEnoughMoneyException;
 import org.example.springshop.exception.orderException.OrderAddFailException;
@@ -17,6 +18,7 @@ import org.example.springshop.repository.OrderRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+
     public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
@@ -43,21 +46,15 @@ public class OrderService {
 
     @Transactional
     public OrderResponseModel addOrder(OrderRequestModel orderRequestModel) {
-
         User user = userRepository.findById(orderRequestModel.getUserId()).orElseThrow();
-
-
         List<OrderItems> orderItemsList = new ArrayList<>();
-
         Order order = Order.orderBuilder().user(user).orderItems(orderItemsList).build();
 
         Long totalAmount = 0L;
         for (OrderItemsRequestModel orderItemsRequestModel : orderRequestModel.getOrderItems()) {
-
             Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow();
             Long quantity = orderItemsRequestModel.getQuantity();
             checkQuantity(product, quantity);
-
             totalAmount += totalPrice(product, quantity);
             OrderItems orderItems = OrderItems.orderItemsBuilder().order(order).product(product).orderItemsRequestModel(orderItemsRequestModel).build();
             updateQuantity(product, quantity);
@@ -106,7 +103,6 @@ public class OrderService {
     public OrderResponseModel editOrder(Long id, OrderRequestModel orderRequestModel) {
         Order updateOrder = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
         User updateUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
-
         for (OrderItems items : updateOrder.getOrderItems()) {
             Product product = items.getProduct();
             product.setInventory(product.getInventory() + items.getQuantity());
@@ -118,6 +114,7 @@ public class OrderService {
         userRepository.save(updateUser);
 
         List<OrderItems> orderItemsList = new ArrayList<>();
+
         Long totalAmount = 0L;
         for (OrderItemsRequestModel orderItemsRequestModel : orderRequestModel.getOrderItems()) {
             Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow();
@@ -171,15 +168,4 @@ public class OrderService {
         Order order = orderRepository.findById(id).orElseThrow();
         return OrderResponseModel.builder().order(order).build();
     }
-//@Transactional
-//    public OrderResponseModel editOrder(Long id, OrderRequestModel orderRequestModel) {
-//        Order updateOrder = orderRepository.findById(id).orElseThrow();
-//        User updateUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow();
-//        List<OrderItems> orderItemsList = orderItemsRepository.findByOrderItemList(orderRequestModel.getOrderItems());
-//
-//        updateOrder.setOrderItems(orderItemsList);
-//        updateOrder.setUser(updateUser);
-//        Order order = orderRepository.save(updateOrder);
-//        return OrderResponseModel.builder().order(order).build();
-//    }
 }

@@ -1,9 +1,6 @@
 package org.example.springshop.service;
 
-import org.example.springshop.model.Product;
-import org.example.springshop.model.User;
-import org.example.springshop.model.dto.requestmodel.CartItemsRequestModel;
-import org.example.springshop.model.dto.requestmodel.CartRequestModel;
+import org.example.springshop.model.Cart;
 import org.example.springshop.model.dto.responsemodel.CartResponseModel;
 import org.example.springshop.repository.CartRepository;
 import org.example.springshop.repository.ProductRepository;
@@ -34,11 +31,24 @@ public class CartService {
         return cartResponseModels;
     }
 
+    public CartResponseModel addCart() {
+
+    }
+
+    public String deleteCart(Long id) {
+        cartRepository.deleteById(id);
+        return "Cart is deleted";
+    }
+
+    public String clearCart(Long id) {
+        Cart updatecart = cartRepository.findById(id).orElseThrow();
+        updatecart.get;
+    }
+
 //    public CartResponseModel addCart(CartRequestModel cartRequestModel) {
 //
 //
 //    }
-
 
 
 //    public CartResponseModel addCart(CartItemsRequestModel  cartItemsRequestModel) {

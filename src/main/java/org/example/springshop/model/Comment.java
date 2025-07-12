@@ -35,4 +35,4 @@ public class Comment {
         this.product = product;
         this.user = user;
     }
-}//Todo
+}
