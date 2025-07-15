@@ -26,9 +26,9 @@ public class CommentController {
         return commentService.listComment();
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public CommentResponseModel editComment(@RequestParam Long commentid, @RequestParam Long userid, @RequestParam Long productid, @RequestBody CommentRequestModel commentRequestModel) {
-        return commentService.editComment(commentid, userid, productid, commentRequestModel);
+    @RequestMapping(value = "/edit/{commentid}", method = RequestMethod.POST)
+    public CommentResponseModel editComment(@PathVariable Long commentid, @RequestBody CommentRequestModel commentRequestModel) {
+        return commentService.editComment(commentid, commentRequestModel);
     }
 
     @DeleteMapping(value = "/delete/{id}")

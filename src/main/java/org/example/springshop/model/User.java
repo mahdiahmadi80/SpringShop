@@ -8,15 +8,13 @@ import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 
 import java.util.List;
 
-//@Data
-@Getter
-@Setter
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_USER")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+//@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +35,6 @@ public class User {
     @Column(name = "PROFILE_PICTURE")
     private String profilePicture;
 
-    @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL)
-    private Wallet wallet;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "USER_ROLE")
     private UserRole role;
@@ -47,8 +42,8 @@ public class User {
     @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Comment> comments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FavoriteItem> favoriteItem;
@@ -60,12 +55,12 @@ public class User {
     @Builder(builderClassName = "UserClass", builderMethodName = "userBuilder")
     public User(UserRequestModel userRequestModel, Address address) {
         this.name = userRequestModel.getName();
-        this.lastName = String.valueOf(userRequestModel.getLastName());
+        this.lastName = userRequestModel.getLastName();
         this.password = userRequestModel.getPassword();
-        this.email = String.valueOf(userRequestModel.getEmail());
-        this.phoneNumber = userRequestModel.getPhoneNumber().orElse(null);
-        this.nationalCode = String.valueOf(userRequestModel.getNationalcode());
-        this.profilePicture = String.valueOf(userRequestModel.getProfilePicture());
+        this.email = userRequestModel.getEmail();
+        this.phoneNumber = userRequestModel.getPhoneNumber();
+        this.nationalCode = userRequestModel.getNationalcode();
+        this.profilePicture = userRequestModel.getProfilePicture();
         this.role = userRequestModel.getUserRole();
         this.address = address;
 //        this.test= String.valueOf(Optional.of(test));

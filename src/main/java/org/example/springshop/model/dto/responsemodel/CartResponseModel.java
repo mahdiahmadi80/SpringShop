@@ -12,12 +12,16 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class CartResponseModel {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("user_id")
     private Long user;
     @JsonProperty("cartItems")
     private List<CartItems> cartItems;
-@Builder
+
+    @Builder
     public CartResponseModel(Cart cart) {
+        this.id = cart.getId();
         this.user = cart.getUser().getId();
         this.cartItems = cart.getCartItems();
     }

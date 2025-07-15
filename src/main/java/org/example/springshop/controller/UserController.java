@@ -53,6 +53,10 @@ public class UserController {
     public UserResponseModel searchUserByNationalCode(@PathVariable String nationalCode) {
         return userService.searchByNationalCode(nationalCode);
     }
+    @RequestMapping(value = "/search/phonenumber/{phoneNumber}", method = RequestMethod.GET)
+    public UserResponseModel searchUserByPhoneNumber(@PathVariable String phoneNumber) {
+        return userService.searchByPhoneNumber(phoneNumber);
+    }
 
     @RequestMapping(value = "/search/email/{email}", method = RequestMethod.GET)
     public UserResponseModel searchByEmail(@PathVariable String email) {

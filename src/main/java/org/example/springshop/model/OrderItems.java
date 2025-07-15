@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
 
-//@Data
-@Getter
-@Setter
+@Data
+//@Getter
+//@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

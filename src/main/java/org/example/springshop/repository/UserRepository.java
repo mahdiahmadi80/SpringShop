@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from shop.tbl_user where USER_ROLE like %:role", nativeQuery = true)
     List<User> searchUserByRole(Long role);
+
+    Optional<User> findByPhoneNumber(String phoneNumber);
 }
 //12292170
 //19779411

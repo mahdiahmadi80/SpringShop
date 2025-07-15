@@ -41,20 +41,20 @@ public class CommentService {
     public CommentResponseModel addComment(CommentRequestModel commentRequestModel) {
         User user = userRepository.findById(commentRequestModel.getUser_id()).orElseThrow(() -> new UserNotFoundException("user not found"));
         Product product = productRepository.findById(commentRequestModel.getProduct_id()).orElseThrow(() -> new ProductNotFoundException("product not found"));
+
         Comment comment = Comment.commentBuilder().commentRequestModel(commentRequestModel).user(user).product(product).build();
         commentRepository.save(comment);
+
         return CommentResponseModel.builder().comment(comment).build();
     }
 
     @Transactional
-    public CommentResponseModel editComment(Long commentId, Long userid, Long productId, CommentRequestModel commentRequestModel) {
-        User user = userRepository.findById(userid).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("product not found"));
+    public CommentResponseModel editComment(Long commentId, CommentRequestModel commentRequestModel) {
         Comment updateComment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotfoundException("comment not found"));
         updateComment.setComment(commentRequestModel.getComment());
         updateComment.setStar(commentRequestModel.getStar());
-        updateComment.setUser(user);
-        updateComment.setProduct(product);
+        updateComment.setUser(updateComment.getUser());
+        updateComment.setProduct(updateComment.getProduct());
         commentRepository.save(updateComment);
         return CommentResponseModel.builder().comment(updateComment).build();
     }

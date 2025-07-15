@@ -1,7 +1,6 @@
 package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
-import org.example.springshop.exception.CartNotFoundException;
 import org.example.springshop.exception.orderException.NotEnoughBalanceException;
 import org.example.springshop.exception.orderException.OrderAddFailException;
 import org.example.springshop.exception.orderException.OrdetNotFoundException;
@@ -12,10 +11,7 @@ import org.example.springshop.model.*;
 import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
 import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
 import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
-import org.example.springshop.repository.CartRepository;
-import org.example.springshop.repository.OrderRepository;
-import org.example.springshop.repository.ProductRepository;
-import org.example.springshop.repository.UserRepository;
+import org.example.springshop.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,13 +23,15 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final WalletRepository walletRepository;
     private final CartRepository cartRepository;
     private final CartService cartService;
 
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository, WalletService walletService, CartRepository cartRepository, CartService cartService) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository, WalletService walletService, WalletRepository walletRepository, CartRepository cartRepository, CartService cartService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.walletRepository = walletRepository;
         this.cartRepository = cartRepository;
         this.cartService = cartService;
     }
@@ -88,7 +86,8 @@ public class OrderService {
 
 
     public void checkWallet(User user, Long totalAmount) {
-        Long walletBalance = user.getWallet().getBalance() - totalAmount;
+        Wallet wallet = walletRepository.findById(user.getId()).orElseThrow();
+        Long walletBalance = wallet.getBalance() - totalAmount;
         if (walletBalance < 0) {
             throw new NotEnoughBalanceException("your balance not enough");
         }
@@ -104,8 +103,10 @@ public class OrderService {
 
 
     public String deduceBalance(User user, Long totalAmount) {
-        user.getWallet().setBalance(user.getWallet().getBalance() - totalAmount);
-        if (user.getWallet().getBalance() < 0) {
+        Wallet wallet = walletRepository.findById(user.getId()).orElseThrow();
+
+        wallet.setBalance(wallet.getBalance() - totalAmount);
+        if (wallet.getBalance() < 0) {
             throw new BalanceException("your balance not enough");
         }
         userRepository.save(user);
@@ -116,12 +117,13 @@ public class OrderService {
     public OrderResponseModel editOrder(Long id, OrderRequestModel orderRequestModel) {
         Order updateOrder = orderRepository.findById(id).orElseThrow(() -> new OrdetNotFoundException("order not found"));
         User updateUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Wallet wallet = walletRepository.findById(updateUser.getId()).orElseThrow();
 
         for (OrderItems items : updateOrder.getOrderItems()) {
             Product product = items.getProduct();
             product.setInventory(backProduct(product, items));
             productRepository.save(product);
-            updateUser.getWallet().setBalance(updateUser.getWallet().getBalance() + (product.getPrice() * items.getQuantity()));
+            wallet.setBalance(wallet.getBalance() + (product.getPrice() * items.getQuantity()));
         }
 
         updateOrder.getOrderItems().clear();
@@ -143,7 +145,7 @@ public class OrderService {
         }
 
         checkWallet(updateUser, totalAmount);
-        updateUser.getWallet().setBalance(updateUser.getWallet().getBalance() - totalAmount);
+        wallet.setBalance(wallet.getBalance() - totalAmount);
         userRepository.save(updateUser);
         updateOrder.setUser(updateUser);
         updateOrder.setOrderItems(orderItemsList);
@@ -160,8 +162,12 @@ public class OrderService {
     }
 
     public String backBalance(Order order, Long totalPrice) {
-        Long balance = order.getUser().getWallet().getBalance() + totalPrice;
-        order.getUser().getWallet().setBalance(balance);
+        User user = userRepository.findById(order.getUser().getId()).orElseThrow();
+        Wallet wallet = walletRepository.findById(user.getId()).orElseThrow();
+        Long balance = wallet.getBalance() + totalPrice;
+        wallet.setBalance(balance);
+        //        Long balance = order.getUser().getWallet().getBalance() + totalPrice;
+//        order.getUser().getWallet().setBalance(balance);
         return "your money deposit in your wallet";
     }
 

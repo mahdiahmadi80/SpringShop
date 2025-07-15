@@ -43,13 +43,14 @@ public class CartService {
         User user = userRepository.findById(cartRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<CartItems> cartItemList = new ArrayList<>();
 
-        Cart cart = Cart.cartBuilder().cartItems(cartItemList).user(user).build();
 
         for (CartItemsRequestModel cartItemsRequestModel : cartRequestModel.getCartItems()) {
             Product product = productRepository.findById(cartItemsRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-            CartItems cartItems = CartItems.cartItemsBuilder().cart(cart).product(product).cartItemsRequestModel(cartItemsRequestModel).build();
+            CartItems cartItems = CartItems.cartItemsBuilder().product(product).cartItemsRequestModel(cartItemsRequestModel).build();
+           cartItems.setCart();
             cartItemList.add(cartItems);
         }
+        Cart cart = Cart.cartBuilder().cartItems(cartItemList).user(user).build();
         cartRepository.save(cart);
         return CartResponseModel.builder().cart(cart).build();
     }

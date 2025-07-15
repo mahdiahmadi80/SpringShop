@@ -11,6 +11,7 @@ import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 import org.example.springshop.model.dto.responsemodel.UserResponseModel;
 import org.example.springshop.repository.AddressRepository;
 import org.example.springshop.repository.UserRepository;
+import org.example.springshop.repository.WalletRepository;
 import org.example.springshop.service.securityservice.JWTService;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,14 @@ public class UserService {
     private final AddressRepository addressRepository;
     private final WalletService walletService;
     private final JWTService jwtService;
+    private final WalletRepository walletRepository;
 
-    public UserService(UserRepository userRepository, AddressRepository addressRepository, WalletService walletService, JWTService jwtService) {
+    public UserService(UserRepository userRepository, AddressRepository addressRepository, WalletService walletService, JWTService jwtService, WalletRepository walletRepository) {
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
         this.walletService = walletService;
         this.jwtService = jwtService;
+        this.walletRepository = walletRepository;
     }
 
     public List<UserResponseModel> listUser() {
@@ -46,7 +49,11 @@ public class UserService {
     @Transactional
     public UserResponseModel addUser(UserRequestModel userRequestModel) {
         userRequestModel.setPassword(generatePassword(userRequestModel.getPassword()));
+
         User user = User.userBuilder().userRequestModel(userRequestModel).build();
+        Wallet wallet = Wallet.userWalletClass().user(user).build();
+
+        walletRepository.save(wallet);
         userRepository.save(user);
         return UserResponseModel.builder().user(user).build();
     }
@@ -57,23 +64,15 @@ public class UserService {
 
     @Transactional
     public UserResponseModel signUpUser(Long id, UserRequestModel userRequestModel) {
+//        User user = userRepository.findById(id).orElseThrow();
         User user = searchUser(id);
-        if (userRequestModel.getLastName() != null && userRequestModel.getLastName().isPresent()) {
-            user.setLastName(userRequestModel.getLastName().get());
-        }
-        if (userRequestModel.getEmail() != null && userRequestModel.getEmail().isPresent()) {
-            user.setEmail(userRequestModel.getEmail().get());
-        }
-        if (userRequestModel.getPhoneNumber() != null && userRequestModel.getPhoneNumber().isPresent()) {
-            user.setPhoneNumber(userRequestModel.getPhoneNumber().get());
-        }
-        if (userRequestModel.getNationalcode() != null && userRequestModel.getNationalcode().isPresent()) {
-            user.setNationalCode(userRequestModel.getNationalcode().get());
-        }
-        if (user.getWallet() == null) {
-            user.setWallet(createWallet(user));
-        }
+        user.setLastName(userRequestModel.getLastName());
+        user.setEmail(userRequestModel.getEmail());
+        user.setPhoneNumber(userRequestModel.getPhoneNumber());
+        user.setNationalCode(userRequestModel.getNationalcode());
+
         Address address = addressRepository.findById(userRequestModel.getAddressId()).orElseThrow(() -> new AddressException("address not found"));
+
         address.setUserId(user);
 
         userRepository.save(user);
@@ -89,15 +88,21 @@ public class UserService {
         return UserResponseModel.builder().user(user).build();
     }
 
+
     public String deleteUser(Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).orElseThrow();
+        Wallet wallet = walletRepository.findWalletByUserId(user.getId()).orElseThrow();
+        walletRepository.delete(wallet);
+        userRepository.delete(user);
         return "user is deleted";
     }
 
-    public Wallet createWallet(User user) {
+    public User createWallet(Long id) {
+        User user = userRepository.findById(id).orElseThrow();
         Wallet wallet = Wallet.userWalletClass().user(user).build();
+//        Wallet wallet =  walletRepository.findWalletByUserId(user).orElseThrow();
         walletService.createWallet(wallet);
-        return wallet;
+        return user;
     }
 
     public UserResponseModel uploadProfilePicture(Long id, String pictureUrl) {
@@ -132,6 +137,11 @@ public class UserService {
         return UserResponseModel.builder().user(user).build();
     }
 
+    public UserResponseModel searchByPhoneNumber(String phoneNumber) {
+        User user = userRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return UserResponseModel.builder().user(user).build();
+    }
+
     public UserResponseModel searchByNationalCode(String nationalCode) {
         User user = userRepository.findByNationalCode(nationalCode).orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserResponseModel.builder().user(user).build();
@@ -150,4 +160,6 @@ public class UserService {
         });
         return userResponseModels;
     }
+
+
 }

@@ -11,8 +11,8 @@ import org.example.springshop.model.CartItems;
 public class CartItemsResponseModel {
     @JsonProperty("id")
     private Long id;
-//    @JsonProperty("user_id")
-//    private Long userId;
+    @JsonProperty("user_id")
+    private Long userId;
     @JsonProperty("product_id")
     private Long productId;
     @JsonProperty("cart")

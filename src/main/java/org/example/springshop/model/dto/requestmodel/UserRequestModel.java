@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.UserRole;
 
-import java.util.Optional;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -17,20 +15,19 @@ public class UserRequestModel {
     @JsonProperty("name")
     private String name;
     @JsonProperty("lastname")
-    private Optional<String> lastName;
+    private String lastName;
     @JsonProperty("password")
     private String password;
     @JsonProperty("email")
-    private Optional<String> email;
+    private String email;
     @JsonProperty("phoneNumber")
-    private Optional<String> phoneNumber;
+    private String phoneNumber;
     @JsonProperty("nationalCode")
-    private Optional<String> nationalcode ; ;
+    private String nationalcode;
     @JsonProperty("profilePicture")
-    private Optional<String> profilePicture;
+    private String profilePicture;
     @JsonProperty("user_role")
     private UserRole userRole;
     @JsonProperty("addressId")
     private Long addressId;
-
 }

@@ -1,5 +1,6 @@
 package org.example.springshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_WALLET")
+//@JsonIgnoreProperties("userId")
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +22,7 @@ public class Wallet {
     @OneToOne
     @JoinColumn(name = "USER_ID")
     private User userId;
+
     @Column(name = "BALANCE")
     private Long balance;
 

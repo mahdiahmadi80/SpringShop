@@ -1,14 +1,15 @@
 package org.example.springshop.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 
-import java.util.List;
-
-//@Data
-@Getter
-@Setter
+@Data
+//@Getter
+//@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,8 +30,6 @@ public class Product {
     @Column(name = "IMAGE")
     private String image;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
-    private List<Comment> comments;
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
@@ -41,7 +40,7 @@ public class Product {
         this.price = request.getPrice();
         this.inventory = request.getInventory();
         this.description = request.getDescription();
-        this.comments = request.getComments();
+
         this.image = request.getImage();
         this.category = category;
     }
