@@ -32,7 +32,7 @@ public class ProductController {
         return productService.editProduct(id, productRequestModel);
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         return productService.deleteProduct(id);
     }
@@ -57,8 +57,8 @@ public class ProductController {
         return productService.searchByPriceBetween(minPrice, maxPrice);
     }
 
-//    @RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
-//    public List<ProductResponseModel> listCategory(@PathVariable String category) {
-//        return productService.listByCategory(category);
-//    }
+    @RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
+    public List<ProductResponseModel> listCategory(@PathVariable Long category) {
+        return productService.listByCategory(category);
+    }
 }

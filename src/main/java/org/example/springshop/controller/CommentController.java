@@ -5,6 +5,8 @@ import org.example.springshop.model.dto.responsemodel.CommentResponseModel;
 import org.example.springshop.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/comment")
 public class CommentController {
@@ -17,6 +19,11 @@ public class CommentController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public CommentResponseModel addComment(@RequestBody CommentRequestModel commentRequestModel) {
         return commentService.addComment(commentRequestModel);
+    }
+
+    @RequestMapping(value = "/list")
+    public List<CommentResponseModel> listComment() {
+        return commentService.listComment();
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)

@@ -36,8 +36,8 @@ public class OrderItemsService {
 
     public OrderItemsResponseModel addOrderItems(OrderItemsRequestModel orderItemsRequestModel) {
         Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow();
-        Order order = orderRepository.findById(orderItemsRequestModel.getOrderId()).orElseThrow();
-        OrderItems orderItems = OrderItems.orderItemsBuilder().orderItemsRequestModel(orderItemsRequestModel).order(order).product(product).build();
+//        Order order = orderRepository.findById(orderItemsRequestModel.getOrderId()).orElseThrow();
+        OrderItems orderItems = OrderItems.orderItemsBuilder().orderItemsRequestModel(orderItemsRequestModel).product(product).build();
 
         orderItemsRepository.save(orderItems);
         return OrderItemsResponseModel.builder().orderItems(orderItems).build();

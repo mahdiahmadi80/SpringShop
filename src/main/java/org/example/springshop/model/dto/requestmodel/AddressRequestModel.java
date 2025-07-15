@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressRequestModel {
-//@JsonProperty("id")
 
     @JsonProperty("country")
     private String country;
@@ -19,4 +18,6 @@ public class AddressRequestModel {
     private Long number;
     @JsonProperty("postnumber")
     private Long postNumber;
+    @JsonProperty("user_id")
+    private Long userId;
 }

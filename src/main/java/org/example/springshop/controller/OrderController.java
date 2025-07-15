@@ -30,7 +30,10 @@ public class OrderController {
     public OrderResponseModel orderEdit(@PathVariable Long id, @RequestBody OrderRequestModel orderRequestModel) {
         return orderService.editOrder(id, orderRequestModel);
     }
-
+//    @RequestMapping(value = "/off/{id}", method = RequestMethod.POST)
+//    public OrderResponseModel offItem(@PathVariable Long id) {
+//        return orderService.offItem(id);
+//        }
     @DeleteMapping(value = "/delete/{id}")
     public String orderDelete(@PathVariable Long id) {
         return orderService.orderDelete(id);
@@ -40,6 +43,11 @@ public class OrderController {
     public OrderResponseModel SearchOrderById(@PathVariable Long id) {
         return orderService.searchById(id);
     }
+
+//    @RequestMapping(value = "/checkout/{cartid}",method = RequestMethod.POST)
+//    public OrderResponseModel checkOutCart(@PathVariable Long cartid){
+//        return orderService.checkOutCart(cartid);
+//    }
 
 
 }

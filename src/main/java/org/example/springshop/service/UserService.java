@@ -1,6 +1,7 @@
 package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
+import org.example.springshop.exception.AddressException;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.exception.userException.VerifyException;
 import org.example.springshop.model.Address;
@@ -69,21 +70,18 @@ public class UserService {
         if (userRequestModel.getNationalcode() != null && userRequestModel.getNationalcode().isPresent()) {
             user.setNationalCode(userRequestModel.getNationalcode().get());
         }
-        if (userRequestModel.getAddressId() != null && userRequestModel.getAddressId().isPresent()) {
-            Address address = addressRepository.findById(userRequestModel.getAddressId().get()).orElseThrow();
-            user.setAddress(address);
-        }
         if (user.getWallet() == null) {
             user.setWallet(createWallet(user));
         }
+        Address address = addressRepository.findById(userRequestModel.getAddressId()).orElseThrow(() -> new AddressException("address not found"));
+        address.setUserId(user);
+
         userRepository.save(user);
         return UserResponseModel.builder().user(user).build();
     }
 
     public UserResponseModel editUser(Long id, UserRequestModel userRequestModel) {
         User updateUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user not found"));
-
-//        String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
         updateUser.setName(userRequestModel.getName());
         updateUser.setPassword(generatePassword(userRequestModel.getPassword()));
         updateUser.setRole(userRequestModel.getUserRole());
@@ -92,9 +90,8 @@ public class UserService {
     }
 
     public String deleteUser(Long id) {
-         userRepository.deleteById(id);
+        userRepository.deleteById(id);
         return "user is deleted";
-
     }
 
     public Wallet createWallet(User user) {
@@ -103,12 +100,12 @@ public class UserService {
         return wallet;
     }
 
-//    public UserResponseModel uploadProfilePicture(Long id, String pictureUrl) {
-//        User user = userRepository.findById(id).orElseThrow();
-//        user.setProfilePicture(pictureUrl);
-//        userRepository.save(user);
-//        return UserResponseModel.builder().user(user).build();
-//    }
+    public UserResponseModel uploadProfilePicture(Long id, String pictureUrl) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user not found"));
+        user.setProfilePicture(pictureUrl);
+        userRepository.save(user);
+        return UserResponseModel.builder().user(user).build();
+    }
 
     public String verify(UserRequestModel userRequestModel) {
         String hashedPassword = generateMD5Hash(userRequestModel.getPassword());
@@ -121,7 +118,7 @@ public class UserService {
         if (hashedPassword.equals(user.getPassword())) {
             token = jwtService.generateToken(userRequestModel.getName());
         } else {
-            throw new VerifyException("password invalid");
+            throw new VerifyException("password not true");
         }
         return token;
     }
@@ -141,7 +138,7 @@ public class UserService {
     }
 
     public UserResponseModel searchByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user not found"));
         return UserResponseModel.builder().user(user).build();
     }
 
@@ -153,11 +150,4 @@ public class UserService {
         });
         return userResponseModels;
     }
-
-//
-//    public UserResponseModel searchByRole(String role) {
-//        User user = userRepository.findByRole(role).orElseThrow();
-//        return UserResponseModel.builder().user(user).build();
-//    }
-
 }

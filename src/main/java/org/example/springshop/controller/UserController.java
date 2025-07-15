@@ -64,11 +64,10 @@ public class UserController {
         return userService.searchUserByRole(role);
     }
 
-//    @RequestMapping(value = "/profile/{id}")
-//    public UserResponseModel uploadProfilePicture(@PathVariable Long id, @RequestBody String pictureUrl) {
-//        return userService.uploadProfilePicture(id, pictureUrl);
-//
-//    }
+    @RequestMapping(value = "/profile/{id}")
+    public UserResponseModel uploadProfilePicture(@PathVariable Long id, @RequestBody String pictureUrl) {
+        return userService.uploadProfilePicture(id, pictureUrl);
+    }
 
     @RequestMapping(value = "/csrf-token", method = RequestMethod.GET)
     public CsrfToken getcsrfToken(HttpServletRequest request) {

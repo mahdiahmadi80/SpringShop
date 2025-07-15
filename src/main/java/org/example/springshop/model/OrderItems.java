@@ -1,13 +1,12 @@
 package org.example.springshop.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,10 +28,12 @@ public class OrderItems {
     private Order order;
 
     @Builder(builderClassName = "OrderItemsClass", builderMethodName = "orderItemsBuilder")
-    public OrderItems(OrderItemsRequestModel orderItemsRequestModel, Product product, Order order) {
-        this.quantity = orderItemsRequestModel.getQuantity();
-        this.amount = orderItemsRequestModel.getAmount();
+    public OrderItems(OrderItemsRequestModel orderItemsRequestModel, Product product, Order order, Long quantity, Long amount) {
+//        this.quantity = orderItemsRequestModel.getQuantity();
+        this.quantity = quantity;
+//        this.amount = orderItemsRequestModel.getAmount();
+        this.amount = amount;
         this.product = product;
-        this.order = order;
+//        this.order = order;
     }
 }

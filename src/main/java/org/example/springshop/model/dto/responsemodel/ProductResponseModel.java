@@ -24,8 +24,8 @@ public class ProductResponseModel {
     private String description;
     @JsonProperty("image")
     private String image;
-    @JsonProperty("comment")
-    private List<Comment> comments;
+//    @JsonProperty("comment")
+//    private List<Comment> comments;
 //    @JsonProperty("category")
 //    private String categories;
 //    @JsonProperty("category_description")
@@ -39,7 +39,7 @@ public class ProductResponseModel {
         this.inventory = product.getInventory();
         this.description = product.getDescription();
         this.image = product.getImage();
-        this.comments = product.getComments();
+//        this.comments = product.getComments();
 
 //        this.categories = product.getCategory().getName();
 //        this.categoryDescription = product.getCategory().getDescription();

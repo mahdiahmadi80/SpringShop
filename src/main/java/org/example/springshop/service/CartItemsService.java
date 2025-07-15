@@ -37,8 +37,8 @@ public class CartItemsService {
 
     public CartItemsResponseModel addCartItems(CartItemsRequestModel cartItemsRequestModel) {
         Product product = productRepository.findById(cartItemsRequestModel.getProductId()).orElseThrow();
-        Cart cart = cartRepository.findById(cartItemsRequestModel.getCartId()).orElseThrow();
-        CartItems cartItems = CartItems.cartItemsBuilder().cartItemsRequestModel(cartItemsRequestModel).product(product).cart(cart).build();
+//        Cart cart = cartRepository.findById(cartItemsRequestModel.getCartId()).orElseThrow();
+        CartItems cartItems = CartItems.cartItemsBuilder().cartItemsRequestModel(cartItemsRequestModel).product(product).build();
         cartItemsRepository.save(cartItems);
         return CartItemsResponseModel.builder().cartItems(cartItems).build();
     }

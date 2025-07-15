@@ -21,14 +21,13 @@ public class Comment {
     @Column(name = "STAR")
     private Long star;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "PRODUCT_ID")
     private Product product;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Builder(builderClassName = "CommentClass", builderMethodName = "commentBuilder")
-
     public Comment(CommentRequestModel commentRequestModel, Product product, User user) {
         this.comment = commentRequestModel.getComment();
         this.star = commentRequestModel.getStar();

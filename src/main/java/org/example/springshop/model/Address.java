@@ -25,13 +25,16 @@ public class Address {
     private Long number;
     @Column(name = "POST_NUMBER")
     private Long postNumber;
-
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    private User userId;
 
     @Builder(builderClassName = "AddressClass", builderMethodName = "addressBuilder")
-    public Address(AddressRequestModel addressRequestModel) {
+    public Address(AddressRequestModel addressRequestModel,User user) {
         this.country = addressRequestModel.getCountry();
         this.city = addressRequestModel.getCity();
         this.number = addressRequestModel.getNumber();
         this.postNumber = addressRequestModel.getPostNumber();
+        this.userId = user;
     }
 }

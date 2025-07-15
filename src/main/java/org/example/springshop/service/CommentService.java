@@ -1,6 +1,9 @@
 package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
+import org.example.springshop.exception.commentException.CommentNotfoundException;
+import org.example.springshop.exception.productException.ProductNotFoundException;
+import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.Comment;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.User;
@@ -10,6 +13,9 @@ import org.example.springshop.repository.CommentRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -23,20 +29,28 @@ public class CommentService {
         this.productRepository = productRepository;
     }
 
+    public List<CommentResponseModel> listComment() {
+        List<CommentResponseModel> commentResponseModels = new ArrayList<>();
+        commentRepository.findAll().forEach(comment -> {
+            CommentResponseModel commentResponseModel = CommentResponseModel.builder().comment(comment).build();
+            commentResponseModels.add(commentResponseModel);
+        });
+        return commentResponseModels;
+    }
+
     public CommentResponseModel addComment(CommentRequestModel commentRequestModel) {
-        User user = userRepository.findById(commentRequestModel.getUser_id()).orElseThrow();
-        Product product = productRepository.findById(commentRequestModel.getProduct_id()).orElseThrow();
+        User user = userRepository.findById(commentRequestModel.getUser_id()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Product product = productRepository.findById(commentRequestModel.getProduct_id()).orElseThrow(() -> new ProductNotFoundException("product not found"));
         Comment comment = Comment.commentBuilder().commentRequestModel(commentRequestModel).user(user).product(product).build();
         commentRepository.save(comment);
         return CommentResponseModel.builder().comment(comment).build();
     }
 
     @Transactional
-    public CommentResponseModel editComment(Long commentid, Long userid, Long productid, CommentRequestModel commentRequestModel) {
-        User user = userRepository.findById(userid).orElseThrow();
-        Product product = productRepository.findById(productid).orElseThrow();
-        Comment updateComment = commentRepository.findById(commentid).orElseThrow();
-
+    public CommentResponseModel editComment(Long commentId, Long userid, Long productId, CommentRequestModel commentRequestModel) {
+        User user = userRepository.findById(userid).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("product not found"));
+        Comment updateComment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotfoundException("comment not found"));
         updateComment.setComment(commentRequestModel.getComment());
         updateComment.setStar(commentRequestModel.getStar());
         updateComment.setUser(user);

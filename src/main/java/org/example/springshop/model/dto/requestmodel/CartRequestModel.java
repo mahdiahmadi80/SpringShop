@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.CartItems;
 
 import java.util.List;
 
@@ -12,8 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartRequestModel {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("user_id")
     private Long userId;
     @JsonProperty("cartItems")
-    private List<CartItems> cartItems;
+    private List<CartItemsRequestModel> cartItems;
 }

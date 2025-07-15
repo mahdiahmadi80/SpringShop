@@ -1,15 +1,14 @@
 package org.example.springshop.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 
 import java.util.List;
 
-@Data
+//@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,11 +29,10 @@ public class Product {
     @Column(name = "IMAGE")
     private String image;
 
-    @OneToMany
-    @Column(name = "COMMENTS")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Comment> comments;
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
     @Builder(builderClassName = "ProductClass", builderMethodName = "productBuilder")

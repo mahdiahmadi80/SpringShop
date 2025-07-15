@@ -21,6 +21,7 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CartItems> cartItems;
 
@@ -28,6 +29,5 @@ public class Cart {
     public Cart(User user, List<CartItems> cartItems) {
         this.user = user;
         this.cartItems = cartItems;
-
     }
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 public class OrderItemsRequestModel {
     @JsonProperty("id")
     private Long id;
@@ -18,7 +17,4 @@ public class OrderItemsRequestModel {
     private Long amount;
     @JsonProperty("product_id")
     private Long productId;
-    @JsonProperty("order_id")
-    private Long orderId;
-
 }

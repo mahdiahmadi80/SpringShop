@@ -2,6 +2,7 @@ package org.example.springshop.service;
 
 import org.example.springshop.exception.walletException.BalanceException;
 import org.example.springshop.exception.walletException.WalletNotFoundException;
+import org.example.springshop.model.User;
 import org.example.springshop.model.Wallet;
 import org.example.springshop.model.dto.requestmodel.WalletRequestModel;
 import org.example.springshop.model.dto.responsemodel.WalletResponseModel;
@@ -28,9 +29,8 @@ public class WalletService {
         return walletResponseModels;
     }
 
-    public WalletResponseModel createWallet(Wallet wallet) {
-        walletRepository.save(wallet);
-        return WalletResponseModel.builder().wallet(wallet).build();
+    public Wallet createWallet(Wallet wallet) {
+        return walletRepository.save(wallet);
     }
 
     public WalletResponseModel infoWallet(Long id) {
@@ -45,23 +45,30 @@ public class WalletService {
         return "your wallet charging your new balance:" + wallet.getBalance();
     }
 
-    public WalletResponseModel deduceWallet(Long id, WalletRequestModel walletRequestModel) {
-        Wallet wallet = walletRepository.findById(id).orElseThrow();
 
-        if (wallet.getBalance() - walletRequestModel.getBalance() != 0) {
-            wallet.setBalance(walletRequestModel.getBalance());
-        } else {
-            throw new BalanceException("balance not enough");
-        }
-
-        walletRepository.save(wallet);
-        return WalletResponseModel.builder().wallet(wallet).build();
-    }
-
-//    public WalletResponseModel chargeWallet(Long id, WalletRequestModel walletRequestModel) {
+//    public WalletResponseModel deduceWallet(Long id, WalletRequestModel walletRequestModel) {
+//        Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
+//
+//        if (wallet.getBalance() - walletRequestModel.getBalance() != 0) {
+//            wallet.setBalance(walletRequestModel.getBalance());
+//        } else {
+//            throw new BalanceException("balance not enough");
+//        }
+//
+//        walletRepository.save(wallet);
+//        return WalletResponseModel.builder().wallet(wallet).build();
 //    }
 
-    public Wallet findById(Long id) {
-        return walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
+    public String chargeWallet(Long id, WalletRequestModel walletRequestModel) {
+        Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
+        wallet.setBalance(walletRequestModel.getBalance() + wallet.getBalance());
+        walletRepository.save(wallet);
+        return "your wallet charge:" + walletRequestModel.getBalance() + "new balance:" + wallet.getBalance();
+
+    }
+
+    public WalletResponseModel findById(Long id) {
+        Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
+        return WalletResponseModel.builder().wallet(wallet).build();
     }
 }

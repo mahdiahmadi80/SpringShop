@@ -1,5 +1,6 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.model.FavoriteItem;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.User;
@@ -37,10 +38,35 @@ public class FavoriteItemService {
 
     public FavoriteItemResponseModel addFavorite(FavoriteItemRequestModel favoriteItemRequestModel) {
         User user = userRepository.findById(favoriteItemRequestModel.getUserId()).orElseThrow();
-        Product product = productRepository.findById(favoriteItemRequestModel.getProductId()).orElseThrow();
-        FavoriteItem favoriteItem = FavoriteItem.favoriteBuilder().user(user).product(product).build();
+        List<Product> productsList = new ArrayList<>();
+
+        for (Long productId : favoriteItemRequestModel.getProduct()) {
+            Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("product not found"));
+            productsList.add(product);
+        }
+        FavoriteItem favoriteItem = FavoriteItem.favoriteBuilder().user(user).product(productsList).build();
         favoriteItemRepository.save(favoriteItem);
         return FavoriteItemResponseModel.builder().favoriteItem(favoriteItem).build();
+    }
 
+    public FavoriteItemResponseModel editList(Long id, FavoriteItemRequestModel favoriteItemRequestModel) {
+
+        FavoriteItem updateFavoriteItem = favoriteItemRepository.findById(id).orElseThrow();
+        List<Product> itemsList = updateFavoriteItem.getProduct();
+        for (Long productId : favoriteItemRequestModel.getProduct()) {
+            Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("product not found"));
+            itemsList.add(product);
+        }
+        updateFavoriteItem.setProduct(itemsList);
+        favoriteItemRepository.save(updateFavoriteItem);
+        return FavoriteItemResponseModel.builder().favoriteItem(updateFavoriteItem).build();
+    }
+
+    public String deleteFavoriteList(Long id) {
+        FavoriteItem favoriteItem =favoriteItemRepository.findById(id).orElseThrow();
+        favoriteItem.getProduct().clear();
+        favoriteItemRepository.save(favoriteItem);
+        favoriteItemRepository.delete(favoriteItem);
+        return "list is deleted";
     }
 }

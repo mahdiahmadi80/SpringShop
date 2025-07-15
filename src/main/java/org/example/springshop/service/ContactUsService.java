@@ -1,5 +1,7 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.contactusException.MessageNotFoundException;
+import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.ContactUs;
 import org.example.springshop.model.User;
 import org.example.springshop.model.dto.requestmodel.ContactUsRequestModel;
@@ -22,8 +24,9 @@ public class ContactUsService {
     }
 
     public ContactUsResponseModel addContactUs(ContactUsRequestModel contactUsRequestModel) {
-        User user = userRepository.findById(contactUsRequestModel.getUser()).orElseThrow();
+        User user = userRepository.findById(contactUsRequestModel.getUser()).orElseThrow(()->new UserNotFoundException("user not found"));
         ContactUs contactUs = ContactUs.contactUsBuilder().contactUsRequestModel(contactUsRequestModel).user(user).build();
+
         contactUsRepository.save(contactUs);
         return ContactUsResponseModel.builder().contactUs(contactUs).build();
     }
@@ -39,12 +42,12 @@ public class ContactUsService {
 
 
     public ContactUsResponseModel showContact(Long id) {
-        ContactUs contactUs = contactUsRepository.findById(id).orElseThrow();
+        ContactUs contactUs = contactUsRepository.findById(id).orElseThrow(()->new MessageNotFoundException("this message not found"));
         contactUs.setShowed(true);
         contactUsRepository.save(contactUs);
         return ContactUsResponseModel.builder().contactUs(contactUs).build();
 
-    }//todo
+    }
 
     public List<ContactUsResponseModel> showUnreadContact() {
         List<ContactUsResponseModel> contactUsResponseModels = new ArrayList<>();
@@ -53,7 +56,7 @@ public class ContactUsService {
             contactUsResponseModels.add(contactUsResponseModel);
         });
         return contactUsResponseModels;
-    }//Todo0
+    }
 
     public String deleteContact(Long id) {
         contactUsRepository.deleteById(id);

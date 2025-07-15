@@ -26,7 +26,6 @@ public class ContactUsController {
     public List<ContactUsResponseModel> showUnreadContact() {
         return contactUsService.showUnreadContact();
     }
-
     @RequestMapping(value = "/read/{id}",method = RequestMethod.GET)
     public ContactUsResponseModel readContact(@PathVariable Long id){
         return contactUsService.showContact(id);

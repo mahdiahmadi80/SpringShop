@@ -23,14 +23,14 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-//    orphanRemoval = true for down
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItems> orderItems;
 
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
-    public Order(User user, List<OrderItems> orderItems) {
+    public Order(User user, Long totalAmount, List<OrderItems> orderItems) {
         this.user = user;
+        this.totalAmount = totalAmount;
         this.orderItems = orderItems;
-//        this.address = address;
     }
 }

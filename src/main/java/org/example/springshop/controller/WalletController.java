@@ -32,14 +32,14 @@ public class WalletController {
         return walletService.depositWallet(id, walletRequestModel);
     }
 
-    @RequestMapping(value = "/Deduction/{id}", method = RequestMethod.POST)
-    public WalletResponseModel deduceWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
-        return walletService.deduceWallet(id, walletRequestModel);
-    }
-//    @RequestMapping(value = "/charge/{id}", method = RequestMethod.POST)
-//    public WalletResponseModel chargeWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
-//        return walletService.chargeWallet(id, walletRequestModel);
+//    @RequestMapping(value = "/Deduction/{id}", method = RequestMethod.POST)
+//    public WalletResponseModel deduceWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
+//        return walletService.deduceWallet(id, walletRequestModel);
 //    }
+    @RequestMapping(value = "/charge/{id}", method = RequestMethod.POST)
+    public String chargeWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
+        return walletService.chargeWallet(id, walletRequestModel);
+    }
 //    @RequestMapping(value = "/transactions/{id}", method = RequestMethod.POST)
 //    public WalletResponseModel transactionsWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
 //        return walletService.deduceWallet(id, walletRequestModel);

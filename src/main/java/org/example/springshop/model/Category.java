@@ -22,12 +22,14 @@ public class Category {
     private String name;
     @Column(name = "DESCRIPTION")
     private String description;
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
 
     @Builder(builderClassName = "CategoryClass", builderMethodName = "categoryBuilder")
     public Category(CategoryRequestModel categoryRequestModel, List<Product> products) {
         this.name = categoryRequestModel.getName();
         this.description = categoryRequestModel.getDescription();
+        this.products = products;
     }
 }

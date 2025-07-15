@@ -3,10 +3,7 @@ package org.example.springshop.controller;
 import org.example.springshop.model.dto.requestmodel.CartItemsRequestModel;
 import org.example.springshop.model.dto.responsemodel.CartItemsResponseModel;
 import org.example.springshop.service.CartItemsService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +25,8 @@ public class CartItemsController {
     public CartItemsResponseModel addCartItems(@RequestBody CartItemsRequestModel cartItemsRequestModel) {
         return cartItemsService.addCartItems(cartItemsRequestModel);
     }
+//    @RequestMapping(value = "/off/{id}", method = RequestMethod.POST)
+//    public CartItemsResponseModel offItem(@PathVariable Long id) {
+//        return cartItemsService.offItem(id);
+//    }//TODO
 }

@@ -16,8 +16,8 @@ public class OrderItemsResponseModel {
     private Long amount;
     @JsonProperty("product_name")
     private String productName;
-    @JsonProperty("order")
-    private Order order;
+//    @JsonProperty("order")
+//    private Order order;
 
 
     @Builder
@@ -26,6 +26,6 @@ public class OrderItemsResponseModel {
         this.quantity = orderItems.getQuantity();
         this.amount = orderItems.getAmount();
         this.productName = product.getName();
-        this.order = order;
+//        this.order = order;
     }
 }

@@ -20,12 +20,11 @@ public class FavoriteItem {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
+    @ManyToMany
+    private List<Product> product;
 
-    @Builder(builderClassName = "FavoriteBuilder", builderMethodName = "favoriteBuilder")
-    public FavoriteItem(User user, Product product) {
+    @Builder(builderClassName = "FavoriteClass", builderMethodName = "favoriteBuilder")
+    public FavoriteItem(User user, List<Product> product) {
         this.user = user;
         this.product = product;
     }

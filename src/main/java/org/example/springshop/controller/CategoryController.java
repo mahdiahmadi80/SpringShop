@@ -31,9 +31,15 @@ public class CategoryController {
     public CategoryResponseModel editCategory(@PathVariable Long id, @RequestBody CategoryRequestModel categoryRequestModel) {
         return categoryService.editCategory(id, categoryRequestModel);
     }
-//    @RequestMapping(value = "/search/{category}")
-//    public List<CategoryResponseModel> productOfCategory(@PathVariable String category){
-//        return categoryService.listProductByCategory(category);
-//    }
+
+    @RequestMapping(value = "show/{id}")
+    public CategoryResponseModel showProducts(@PathVariable Long id){
+        return categoryService.showProduct(id);
+    }//todo
+    @DeleteMapping(value = "/delete/{id}")
+    public String deleteCategory(@PathVariable Long id) {
+        return categoryService.deleteCategory(id);
+    }
+
 
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.Address;
 import org.example.springshop.model.UserRole;
 
 import java.util.Optional;
@@ -26,12 +25,12 @@ public class UserRequestModel {
     @JsonProperty("phoneNumber")
     private Optional<String> phoneNumber;
     @JsonProperty("nationalCode")
-    private Optional<String> nationalcode;
+    private Optional<String> nationalcode ; ;
     @JsonProperty("profilePicture")
     private Optional<String> profilePicture;
     @JsonProperty("user_role")
     private UserRole userRole;
     @JsonProperty("addressId")
-    private Optional<Long> addressId;
+    private Long addressId;
 
 }

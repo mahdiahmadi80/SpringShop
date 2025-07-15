@@ -21,6 +21,7 @@ public class CartItems {
     private Product product;
     @Column(name = "QUANTITY")
     private Long quantity;
+
     @ManyToOne
     @JoinColumn(name = "CART_ID")
     private Cart cart;
@@ -29,7 +30,7 @@ public class CartItems {
     public CartItems(CartItemsRequestModel cartItemsRequestModel, Product product, Cart cart) {
         this.product = product;
         this.quantity = cartItemsRequestModel.getQuantity();
-        this.cart = cart;
+//        this.cart = cart;
     }
 }
 

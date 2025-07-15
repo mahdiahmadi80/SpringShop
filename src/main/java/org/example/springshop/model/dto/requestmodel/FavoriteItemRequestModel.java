@@ -5,14 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class FavoriteItemRequestModel {
     @JsonProperty("userId")
     private Long userId;
-    @JsonProperty("productId")
-    private Long productId;
-
-
+    @JsonProperty("product")
+    private List<Long> product;
 }

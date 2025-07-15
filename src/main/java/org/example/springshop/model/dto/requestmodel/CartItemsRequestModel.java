@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItemsRequestModel {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("product_id")
     private Long productId;
     @JsonProperty("quantity")
     private Long quantity;
-    @JsonProperty("cart_id")
-    private Long cartId;
+//    @JsonProperty("cart_id")
+//    private Long cartId;
 
 }

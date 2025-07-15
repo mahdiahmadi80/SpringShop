@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.FavoriteItem;
+import org.example.springshop.model.Product;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -12,11 +15,11 @@ public class FavoriteItemResponseModel {
     @JsonProperty("user_id")
     private Long userId;
     @JsonProperty("product_id")
-    private Long productId;
+    private List<Product> productId;
 
     @Builder
     public FavoriteItemResponseModel(FavoriteItem favoriteItem) {
         this.userId = favoriteItem.getUser().getId();
-        this.productId = favoriteItem.getProduct().getId();
+        this.productId = favoriteItem.getProduct();
     }
 }

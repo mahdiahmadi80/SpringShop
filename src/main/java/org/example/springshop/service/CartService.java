@@ -1,6 +1,14 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.CartNotFoundException;
+import org.example.springshop.exception.productException.ProductNotFoundException;
+import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.Cart;
+import org.example.springshop.model.CartItems;
+import org.example.springshop.model.Product;
+import org.example.springshop.model.User;
+import org.example.springshop.model.dto.requestmodel.CartItemsRequestModel;
+import org.example.springshop.model.dto.requestmodel.CartRequestModel;
 import org.example.springshop.model.dto.responsemodel.CartResponseModel;
 import org.example.springshop.repository.CartRepository;
 import org.example.springshop.repository.ProductRepository;
@@ -31,30 +39,30 @@ public class CartService {
         return cartResponseModels;
     }
 
-    public CartResponseModel addCart() {
+    public CartResponseModel addCart(CartRequestModel cartRequestModel) {
+        User user = userRepository.findById(cartRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        List<CartItems> cartItemList = new ArrayList<>();
 
+        Cart cart = Cart.cartBuilder().cartItems(cartItemList).user(user).build();
+
+        for (CartItemsRequestModel cartItemsRequestModel : cartRequestModel.getCartItems()) {
+            Product product = productRepository.findById(cartItemsRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
+            CartItems cartItems = CartItems.cartItemsBuilder().cart(cart).product(product).cartItemsRequestModel(cartItemsRequestModel).build();
+            cartItemList.add(cartItems);
+        }
+        cartRepository.save(cart);
+        return CartResponseModel.builder().cart(cart).build();
     }
 
     public String deleteCart(Long id) {
         cartRepository.deleteById(id);
-        return "Cart is deleted";
+        return "Cart deleted";
     }
 
-    public String clearCart(Long id) {
-        Cart updatecart = cartRepository.findById(id).orElseThrow();
-        updatecart.get;
+    public String clearCartItem(Long id) {
+        Cart updatecart = cartRepository.findById(id).orElseThrow(() -> new CartNotFoundException("cart not found"));
+        updatecart.getCartItems().clear();
+        cartRepository.save(updatecart);
+        return "cart cleared";
     }
-
-//    public CartResponseModel addCart(CartRequestModel cartRequestModel) {
-//
-//
-//    }
-
-
-//    public CartResponseModel addCart(CartItemsRequestModel  cartItemsRequestModel) {
-//        User user = userRepository.findById(cartItemsRequestModel.).orElseThrow();
-//
-//
-//    }
-
 }
