@@ -1,6 +1,7 @@
 package org.example.springshop.service;
 
 import org.example.springshop.exception.categoryException.CategoryNotFoundException;
+import org.example.springshop.exception.orderException.OrderAddFailException;
 import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.model.Category;
 import org.example.springshop.model.Product;
@@ -55,6 +56,10 @@ public class ProductService {
             updateProduct.setPrice(productRequestModel.getPrice());
         }
         updateProduct.setPrice(updateProduct.getPrice());
+        if (productRequestModel.getDescription() != null) {
+            updateProduct.setDescription(productRequestModel.getDescription());
+        }
+        updateProduct.setDescription(updateProduct.getDescription());
         productRepository.save(updateProduct);
         return ProductResponseModel.builder().product(updateProduct).build();
     }
@@ -63,6 +68,26 @@ public class ProductService {
         productRepository.deleteById(id);
         return "product is deleted";
     }
+
+    public Long itemPrice(Product product, Long quantity) {
+        return product.getPrice() * quantity;
+    }
+
+    public void checkQuantity(Product product, Long quantity) {
+        if (quantity > product.getInventory()) {
+            throw new ProductNotFoundException("your count is over than inventory");
+        }
+    }
+
+    public void updateQuantity(Product product, Long count) {
+        product.setInventory(product.getInventory() - count);
+        if (product.getInventory() < 0) {
+            throw new OrderAddFailException("product not enough");
+        }
+        productRepository.save(product);
+    }
+
+
 
     public ProductResponseModel searchById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("product not found"));

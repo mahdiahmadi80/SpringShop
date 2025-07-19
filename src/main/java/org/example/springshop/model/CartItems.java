@@ -1,5 +1,6 @@
 package org.example.springshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.example.springshop.model.dto.requestmodel.CartItemsRequestModel;
 @Data
 @Entity
 @Table(name = "TBL_CARTITEMS")
+@JsonIgnoreProperties("cart")
 public class CartItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

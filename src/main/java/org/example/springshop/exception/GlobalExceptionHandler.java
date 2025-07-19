@@ -102,6 +102,10 @@ public class GlobalExceptionHandler {
         return buildResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<Object> handelCartNotFound(CartNotFoundException exception) {
+        return buildResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     private ResponseEntity<Object> buildResponse(String message, HttpStatus httpStatus) {
         Map<String, Object> body = new HashMap<>();

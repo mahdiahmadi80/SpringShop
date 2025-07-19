@@ -2,7 +2,6 @@ package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
 import org.example.springshop.exception.CartNotFoundException;
-import org.example.springshop.exception.orderException.OrderAddFailException;
 import org.example.springshop.exception.orderException.OrderNotFoundException;
 import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.exception.userException.UserNotFoundException;
@@ -26,14 +25,17 @@ public class OrderService {
     private final WalletRepository walletRepository;
     private final CartRepository cartRepository;
     private final WalletService walletService;
+    private final ProductService productService;
 
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository, WalletService walletService, WalletRepository walletRepository, CartRepository cartRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository, WalletService walletService, WalletRepository walletRepository, CartRepository cartRepository, ProductService productService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+
         this.walletRepository = walletRepository;
         this.cartRepository = cartRepository;
         this.walletService = walletService;
+        this.productService = productService;
     }
 
     public List<OrderResponseModel> listOrder() {
@@ -74,58 +76,34 @@ public class OrderService {
 //        return OrderResponseModel.builder().order(order).build();
 //    }
 
-    public Long itemPrice(Product product, Long quantity) {
-        return product.getPrice() * quantity;
-    }
-
-    public void checkQuantity(Product product, Long quantity) {
-        if (quantity > product.getInventory()) {
-            throw new ProductNotFoundException("your count is over than inventory");
-        }
-    }
-
-    public void updateQuantity(Product product, Long count) {
-        product.setInventory(product.getInventory() - count);
-        if (product.getInventory() < 0) {
-            throw new OrderAddFailException("product not enough");
-        }
-        productRepository.save(product);
-    }
 
     @Transactional
     public OrderResponseModel editOrder(Long id, OrderRequestModel orderRequestModel) {
         Order updateOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("order not found"));
-        User updateUser = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Wallet wallet = walletRepository.findWalletByUserId(updateUser.getId()).orElseThrow();
+        updateOrder.setUser(updateOrder.getUser());
         for (OrderItems items : updateOrder.getOrderItems()) {
             Product product = items.getProduct();
             product.setInventory(backProduct(product, items));
             productRepository.save(product);
-            wallet.setBalance(wallet.getBalance() + (product.getPrice() * items.getQuantity()));
         }
-
         updateOrder.getOrderItems().clear();
-        userRepository.save(updateUser);
-
         List<OrderItems> orderItemsList = new ArrayList<>();
+
         Long totalAmount = 0L;
         for (OrderItemsRequestModel orderItemsRequestModel : orderRequestModel.getOrderItems()) {
-            Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow();
+
+            Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow(()->new ProductNotFoundException("product not found"));
             Long quantity = orderItemsRequestModel.getQuantity();
-            checkQuantity(product, quantity);
+            productService.checkQuantity(product, quantity);
 
             totalAmount += product.getPrice() * quantity;
             product.setInventory(product.getInventory() - quantity);
             productRepository.save(product);
-
-            OrderItems orderItems = OrderItems.orderItemsBuilder().order(updateOrder).product(product).build();
+            OrderItems orderItems = OrderItems.orderItemsBuilder().order(updateOrder).quantity(quantity).product(product).amount(totalAmount).build();
             orderItemsList.add(orderItems);
         }
 
-        walletService.checkWallet(updateUser, totalAmount);
-        wallet.setBalance(wallet.getBalance() - totalAmount);
-        userRepository.save(updateUser);
-        updateOrder.setUser(updateUser);
+
         updateOrder.setOrderItems(orderItemsList);
         updateOrder.setTotalAmount(totalAmount);
         orderRepository.save(updateOrder);
@@ -159,12 +137,14 @@ public class OrderService {
     @Transactional
     public String paymentOrder(Long id) {
         Order order = orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException("order not found"));
-        Long totalAmount = order.getTotalAmount();
-        walletService.deduceWallet(order, totalAmount);
-        order.setPaymentAt(LocalDateTime.now());
-        order.setPayment(true);
-        orderRepository.save(order);
-        return "payment is ok ";
+        if (!order.isPayment()) {
+            Long totalAmount = order.getTotalAmount();
+            walletService.deduceWallet(order, totalAmount);
+            order.setPaymentAt(LocalDateTime.now());
+            order.setPayment(true);
+            orderRepository.save(order);
+        }
+        return "your order was paid";
     }
 
 
@@ -173,15 +153,16 @@ public class OrderService {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("cart not found"));
         User user = userRepository.findById(cart.getUser().getId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<CartItems> cartItemsList = cart.getCartItems();
+
         List<OrderItems> orderItemsList = new ArrayList<>();
         Long totalAmount = 0L;
         for (CartItems cartItems : cartItemsList) {
             Product product = cartItems.getProduct();
             Long quantity = cartItems.getQuantity();
-            checkQuantity(product, quantity);
-            Long itemPrice = itemPrice(product, quantity);
+            productService.checkQuantity(product, quantity);
+            Long itemPrice = productService.itemPrice(product, quantity);
             totalAmount += itemPrice;
-            updateQuantity(product, quantity);
+            productService.updateQuantity(product, quantity);
             OrderItems orderItems = OrderItems.orderItemsBuilder().amount(itemPrice).product(product).quantity(quantity).build();
             orderItemsList.add(orderItems);
         }

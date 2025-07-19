@@ -24,7 +24,7 @@ public class CategoryResponseModel {
     public CategoryResponseModel(Category category) {
         this.name = category.getName();
         this.description = category.getDescription();
-        this.products = category.getProducts();
+//        this.products = category.getProducts();
 
     }
 }

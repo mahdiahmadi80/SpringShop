@@ -1,5 +1,6 @@
 package org.example.springshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
@@ -10,6 +11,7 @@ import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_ORDERITEMS")
+@JsonIgnoreProperties("order")
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

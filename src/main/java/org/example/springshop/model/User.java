@@ -36,14 +36,12 @@ public class User {
     private String nationalCode;
     @Column(name = "PROFILE_PICTURE")
     private String profilePicture;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "USER_ROLE")
     private UserRole role;
     @CreationTimestamp
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;

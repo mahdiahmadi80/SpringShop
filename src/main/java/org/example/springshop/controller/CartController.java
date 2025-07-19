@@ -26,12 +26,17 @@ public class CartController {
         return cartService.addCart(cartRequestModel);
     }
 
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
+    public CartResponseModel editCart(@PathVariable Long id, @RequestBody CartRequestModel cartResponseModel) {
+        return cartService.editCart(id, cartResponseModel);
+    }
+
     @DeleteMapping(value = "/delete/{id}")
     public String deleteCart(@PathVariable Long id) {
         return cartService.deleteCart(id);
     }
 
-    @RequestMapping(value = "/clear/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/clear/{id}", method = RequestMethod.POST)
     public String clearCartItem(@PathVariable Long id) {
         return cartService.clearCartItem(id);
     }

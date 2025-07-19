@@ -1,5 +1,7 @@
 package org.example.springshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +16,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "TBL_CATEGORY")
+@JsonIgnoreProperties("products")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +25,12 @@ public class Category {
     private String name;
     @Column(name = "DESCRIPTION")
     private String description;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Product> products;
+
 
     @Builder(builderClassName = "CategoryClass", builderMethodName = "categoryBuilder")
     public Category(CategoryRequestModel categoryRequestModel, List<Product> products) {
         this.name = categoryRequestModel.getName();
         this.description = categoryRequestModel.getDescription();
-        this.products = products;
+
     }
 }

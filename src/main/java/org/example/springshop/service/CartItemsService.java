@@ -1,12 +1,11 @@
 package org.example.springshop.service;
 
-import org.example.springshop.model.Cart;
+import org.example.springshop.exception.CartNotFoundException;
 import org.example.springshop.model.CartItems;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.dto.requestmodel.CartItemsRequestModel;
 import org.example.springshop.model.dto.responsemodel.CartItemsResponseModel;
 import org.example.springshop.repository.CartItemsRepository;
-import org.example.springshop.repository.CartRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +38,10 @@ public class CartItemsService {
         return CartItemsResponseModel.builder().cartItems(cartItems).build();
     }
 
+    public String deleteCartItem(Long id) {
+       cartItemsRepository.findById(id).orElseThrow(()->new CartNotFoundException("cart not found"));
+        cartItemsRepository.deleteById(id);
+        return "cart deleted";
+    }
 
 }
