@@ -35,7 +35,7 @@ public class ProductService {
     }
 
     public ProductResponseModel addProduct(ProductRequestModel requestModel) {
-        Category category = categoryRepository.findById(requestModel.getCategory()).orElseThrow(()->new CategoryNotFoundException("category not found"));
+        Category category = categoryRepository.findById(requestModel.getCategory()).orElseThrow(() -> new CategoryNotFoundException("category not found"));
         Product product = Product.productBuilder().request(requestModel).category(category).build();
         productRepository.save(product);
         return ProductResponseModel.builder().product(product).build();
@@ -43,8 +43,10 @@ public class ProductService {
 
     public ProductResponseModel editProduct(Long id, ProductRequestModel productRequestModel) {
         Product updateProduct = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("product not found"));
-        updateProduct.setName(productRequestModel.getName());
-
+        if (productRequestModel.getName() != null) {
+            updateProduct.setName(productRequestModel.getName());
+        }
+        updateProduct.setName(updateProduct.getName());
         if (productRequestModel.getInventory() != null) {
             updateProduct.setInventory(productRequestModel.getInventory());
         }
@@ -63,9 +65,9 @@ public class ProductService {
     }
 
     public ProductResponseModel searchById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("product not found"));
         return ProductResponseModel.builder().product(product).build();
-    }//todo
+    }
 
     public List<ProductResponseModel> searchByProductName(String name) {
         List<ProductResponseModel> productResponseModels = new ArrayList<>();
@@ -93,6 +95,7 @@ public class ProductService {
         });
         return productResponseModels;
     }
+
     public List<ProductResponseModel> listByCategory(Long category) {
         List<ProductResponseModel> productResponseModels = new ArrayList<>();
         productRepository.findByCategoryId(category).forEach(product -> {

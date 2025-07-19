@@ -1,10 +1,12 @@
 package org.example.springshop.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.ContactUsRequestModel;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -24,6 +26,7 @@ public class ContactUs {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+
     @Builder(builderClassName = "ContactUsClass", builderMethodName = "contactUsBuilder")
     public ContactUs(ContactUsRequestModel contactUsRequestModel, User user) {
         this.id = contactUsRequestModel.getId();

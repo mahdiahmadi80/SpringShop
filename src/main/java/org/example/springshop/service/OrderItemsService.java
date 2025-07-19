@@ -17,12 +17,10 @@ import java.util.List;
 public class OrderItemsService {
     private final OrderItemsRepository orderItemsRepository;
     private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
 
     public OrderItemsService(OrderItemsRepository orderItemsRepository, ProductRepository productRepository, OrderRepository orderRepository) {
         this.orderItemsRepository = orderItemsRepository;
         this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
     }
 
     public List<OrderItemsResponseModel> listOrderItems() {
@@ -36,9 +34,7 @@ public class OrderItemsService {
 
     public OrderItemsResponseModel addOrderItems(OrderItemsRequestModel orderItemsRequestModel) {
         Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow();
-//        Order order = orderRepository.findById(orderItemsRequestModel.getOrderId()).orElseThrow();
-        OrderItems orderItems = OrderItems.orderItemsBuilder().orderItemsRequestModel(orderItemsRequestModel).product(product).build();
-
+        OrderItems orderItems = OrderItems.orderItemsBuilder().product(product).build();
         orderItemsRepository.save(orderItems);
         return OrderItemsResponseModel.builder().orderItems(orderItems).build();
     }

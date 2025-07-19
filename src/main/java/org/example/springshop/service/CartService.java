@@ -2,6 +2,7 @@ package org.example.springshop.service;
 
 import org.example.springshop.exception.CartNotFoundException;
 import org.example.springshop.exception.productException.ProductNotFoundException;
+import org.example.springshop.exception.productException.ProductValueException;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.Cart;
 import org.example.springshop.model.CartItems;
@@ -38,24 +39,28 @@ public class CartService {
         });
         return cartResponseModels;
     }
-
+    public void checkQuantity(Product product, Long quantity) {
+        if (quantity > product.getInventory()) {
+            throw new ProductNotFoundException("your count is over than inventory");
+        }
+    }
     public CartResponseModel addCart(CartRequestModel cartRequestModel) {
         User user = userRepository.findById(cartRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<CartItems> cartItemList = new ArrayList<>();
-
-
+        Cart cart = Cart.cartBuilder().user(user).cartItems(cartItemList).build();
         for (CartItemsRequestModel cartItemsRequestModel : cartRequestModel.getCartItems()) {
             Product product = productRepository.findById(cartItemsRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-            CartItems cartItems = CartItems.cartItemsBuilder().product(product).cartItemsRequestModel(cartItemsRequestModel).build();
-           cartItems.setCart();
+            Long quantity = cartItemsRequestModel.getQuantity();
+            checkQuantity(product,quantity);
+            CartItems cartItems = CartItems.cartItemsBuilder().cart(cart).product(product).cartItemsRequestModel(cartItemsRequestModel).build();
             cartItemList.add(cartItems);
         }
-        Cart cart = Cart.cartBuilder().cartItems(cartItemList).user(user).build();
         cartRepository.save(cart);
         return CartResponseModel.builder().cart(cart).build();
     }
 
     public String deleteCart(Long id) {
+        cartRepository.findCartById(id).orElseThrow(() -> new CartNotFoundException("cart not found"));
         cartRepository.deleteById(id);
         return "Cart deleted";
     }

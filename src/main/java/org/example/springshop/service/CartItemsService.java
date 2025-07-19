@@ -17,13 +17,10 @@ import java.util.List;
 public class CartItemsService {
     private final CartItemsRepository cartItemsRepository;
     private final ProductRepository productRepository;
-    private final CartRepository cartRepository;
 
-    //private final
-    public CartItemsService(CartItemsRepository cartItemsRepository, ProductRepository productRepository, CartRepository cartRepository) {
+    public CartItemsService(CartItemsRepository cartItemsRepository, ProductRepository productRepository) {
         this.cartItemsRepository = cartItemsRepository;
         this.productRepository = productRepository;
-        this.cartRepository = cartRepository;
     }
 
     public List<CartItemsResponseModel> listCartItems() {
@@ -37,10 +34,10 @@ public class CartItemsService {
 
     public CartItemsResponseModel addCartItems(CartItemsRequestModel cartItemsRequestModel) {
         Product product = productRepository.findById(cartItemsRequestModel.getProductId()).orElseThrow();
-//        Cart cart = cartRepository.findById(cartItemsRequestModel.getCartId()).orElseThrow();
         CartItems cartItems = CartItems.cartItemsBuilder().cartItemsRequestModel(cartItemsRequestModel).product(product).build();
         cartItemsRepository.save(cartItems);
         return CartItemsResponseModel.builder().cartItems(cartItems).build();
     }
+
 
 }

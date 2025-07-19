@@ -1,6 +1,7 @@
 package org.example.springshop.service;
 
 import org.example.springshop.exception.productException.ProductNotFoundException;
+import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.FavoriteItem;
 import org.example.springshop.model.Product;
 import org.example.springshop.model.User;
@@ -26,7 +27,6 @@ public class FavoriteItemService {
         this.productRepository = productRepository;
     }
 
-
     public List<FavoriteItemResponseModel> listFavorite() {
         List<FavoriteItemResponseModel> favoriteItemResponseModels = new ArrayList<>();
         favoriteItemRepository.findAll().forEach(favoriteItem -> {
@@ -37,9 +37,8 @@ public class FavoriteItemService {
     }
 
     public FavoriteItemResponseModel addFavorite(FavoriteItemRequestModel favoriteItemRequestModel) {
-        User user = userRepository.findById(favoriteItemRequestModel.getUserId()).orElseThrow();
+        User user = userRepository.findById(favoriteItemRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
         List<Product> productsList = new ArrayList<>();
-
         for (Long productId : favoriteItemRequestModel.getProduct()) {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("product not found"));
             productsList.add(product);
@@ -63,7 +62,7 @@ public class FavoriteItemService {
     }
 
     public String deleteFavoriteList(Long id) {
-        FavoriteItem favoriteItem =favoriteItemRepository.findById(id).orElseThrow();
+        FavoriteItem favoriteItem = favoriteItemRepository.findById(id).orElseThrow();
         favoriteItem.getProduct().clear();
         favoriteItemRepository.save(favoriteItem);
         favoriteItemRepository.delete(favoriteItem);

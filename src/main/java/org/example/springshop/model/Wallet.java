@@ -1,18 +1,20 @@
 package org.example.springshop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_WALLET")
-//@JsonIgnoreProperties("userId")
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,15 @@ public class Wallet {
 
     @Column(name = "BALANCE")
     private Long balance;
+
+    @CreationTimestamp
+    @Column(name = "CREATED_AT")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
+
 
     @Builder(builderClassName = "UserWalletClass", builderMethodName = "userWalletClass")
     public Wallet(User user) {

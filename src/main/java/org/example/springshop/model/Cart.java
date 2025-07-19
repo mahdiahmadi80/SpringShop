@@ -22,7 +22,7 @@ public class Cart {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CartItems> cartItems;
 
     @Builder(builderClassName = "CartBuilderClass", builderMethodName = "cartBuilder")

@@ -5,8 +5,7 @@ import lombok.*;
 import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
 
 @Data
-//@Getter
-//@Setter
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,12 +27,10 @@ public class OrderItems {
     private Order order;
 
     @Builder(builderClassName = "OrderItemsClass", builderMethodName = "orderItemsBuilder")
-    public OrderItems(OrderItemsRequestModel orderItemsRequestModel, Product product, Order order, Long quantity, Long amount) {
-//        this.quantity = orderItemsRequestModel.getQuantity();
+    public OrderItems(Long quantity, Product product, Order order, Long amount) {
         this.quantity = quantity;
-//        this.amount = orderItemsRequestModel.getAmount();
         this.amount = amount;
         this.product = product;
-//        this.order = order;
+        this.order = order;
     }
 }

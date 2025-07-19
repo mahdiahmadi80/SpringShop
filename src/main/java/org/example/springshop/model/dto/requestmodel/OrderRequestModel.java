@@ -15,7 +15,7 @@ public class OrderRequestModel {
     private Long id;
     @JsonProperty("user_id")
     private Long userId;
-@JsonProperty("orderItem")
+@JsonProperty("orderItems")
     private List<OrderItemsRequestModel> orderItems;
 
 //    @JsonProperty("product_id")

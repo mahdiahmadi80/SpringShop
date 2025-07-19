@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,11 +20,21 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-    @Column(name = "TOTALAMOUNT")
-    private Long totalAmount;
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+    @Column(name = "TOTALAMOUNT")
+    private Long totalAmount;
+
+    @Column(name = "PAYMENT")
+    private boolean payment;
+
+    @Column(name = "CREATED_AT")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "PAYMENT_AT")
+    private LocalDateTime paymentAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItems> orderItems;
@@ -32,5 +44,7 @@ public class Order {
         this.user = user;
         this.totalAmount = totalAmount;
         this.orderItems = orderItems;
+        this.payment = false;
+
     }
 }

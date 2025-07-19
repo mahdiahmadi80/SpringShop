@@ -6,10 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
-//@Getter
-//@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,10 +31,15 @@ public class Product {
     private String description;
     @Column(name = "IMAGE")
     private String image;
-
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
+    @CreationTimestamp
+    @Column(name = "CREATED_AT")
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
 
     @Builder(builderClassName = "ProductClass", builderMethodName = "productBuilder")
     public Product(ProductRequestModel request, Category category) {
@@ -40,7 +47,6 @@ public class Product {
         this.price = request.getPrice();
         this.inventory = request.getInventory();
         this.description = request.getDescription();
-
         this.image = request.getImage();
         this.category = category;
     }

@@ -1,4 +1,4 @@
-package org.example.springshop.exception.orderException;
+package org.example.springshop.exception.walletException;
 
 public class NotEnoughBalanceException extends RuntimeException {
     public NotEnoughBalanceException(String message) {

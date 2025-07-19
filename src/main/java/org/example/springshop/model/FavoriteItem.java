@@ -1,6 +1,5 @@
 package org.example.springshop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +20,6 @@ public class FavoriteItem {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-
     @ManyToMany
     private List<Product> product;
 

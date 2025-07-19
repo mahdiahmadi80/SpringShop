@@ -1,9 +1,10 @@
 package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
-import org.example.springshop.exception.AddressException;
+import org.example.springshop.exception.Address.AddressException;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.exception.userException.VerifyException;
+import org.example.springshop.exception.walletException.WalletNotFoundException;
 import org.example.springshop.model.Address;
 import org.example.springshop.model.User;
 import org.example.springshop.model.Wallet;
@@ -24,17 +25,17 @@ import static org.example.springshop.config.SecurityConfig.generateMD5Hash;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
-    private final WalletService walletService;
     private final JWTService jwtService;
     private final WalletRepository walletRepository;
+    private final WalletService walletService;
+    private final AddressRepository addressRepository;
 
-    public UserService(UserRepository userRepository, AddressRepository addressRepository, WalletService walletService, JWTService jwtService, WalletRepository walletRepository) {
+    public UserService(UserRepository userRepository, JWTService jwtService, WalletRepository walletRepository, WalletService walletService, AddressRepository addressRepository) {
         this.userRepository = userRepository;
-        this.addressRepository = addressRepository;
-        this.walletService = walletService;
         this.jwtService = jwtService;
         this.walletRepository = walletRepository;
+        this.walletService = walletService;
+        this.addressRepository = addressRepository;
     }
 
     public List<UserResponseModel> listUser() {
@@ -49,32 +50,22 @@ public class UserService {
     @Transactional
     public UserResponseModel addUser(UserRequestModel userRequestModel) {
         userRequestModel.setPassword(generatePassword(userRequestModel.getPassword()));
-
         User user = User.userBuilder().userRequestModel(userRequestModel).build();
-        Wallet wallet = Wallet.userWalletClass().user(user).build();
-
-        walletRepository.save(wallet);
+        walletService.createWallet(user);
         userRepository.save(user);
         return UserResponseModel.builder().user(user).build();
     }
-
     public String generatePassword(String password) {
         return generateMD5Hash(password);
     }
 
     @Transactional
     public UserResponseModel signUpUser(Long id, UserRequestModel userRequestModel) {
-//        User user = userRepository.findById(id).orElseThrow();
         User user = searchUser(id);
         user.setLastName(userRequestModel.getLastName());
         user.setEmail(userRequestModel.getEmail());
         user.setPhoneNumber(userRequestModel.getPhoneNumber());
-        user.setNationalCode(userRequestModel.getNationalcode());
-
-        Address address = addressRepository.findById(userRequestModel.getAddressId()).orElseThrow(() -> new AddressException("address not found"));
-
-        address.setUserId(user);
-
+        user.setNationalCode(userRequestModel.getNationalCode());
         userRepository.save(user);
         return UserResponseModel.builder().user(user).build();
     }
@@ -88,21 +79,22 @@ public class UserService {
         return UserResponseModel.builder().user(user).build();
     }
 
+    public Long findAddressByUserId(Long id) {
+        Address address = addressRepository.findAddressByUserId(id).orElseThrow(() -> new AddressException("address not found"));
+        return address.getId();
+    }
 
+    @Transactional
     public String deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow();
-        Wallet wallet = walletRepository.findWalletByUserId(user.getId()).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Wallet wallet = walletRepository.findWalletByUserId(user.getId()).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
+        Long address = findAddressByUserId(id);
+        if (address != null) {
+            addressRepository.deleteById(address);
+        }
         walletRepository.delete(wallet);
         userRepository.delete(user);
         return "user is deleted";
-    }
-
-    public User createWallet(Long id) {
-        User user = userRepository.findById(id).orElseThrow();
-        Wallet wallet = Wallet.userWalletClass().user(user).build();
-//        Wallet wallet =  walletRepository.findWalletByUserId(user).orElseThrow();
-        walletService.createWallet(wallet);
-        return user;
     }
 
     public UserResponseModel uploadProfilePicture(Long id, String pictureUrl) {

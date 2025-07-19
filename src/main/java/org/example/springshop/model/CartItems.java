@@ -29,7 +29,7 @@ public class CartItems {
     public CartItems(CartItemsRequestModel cartItemsRequestModel, Product product, Cart cart) {
         this.product = product;
         this.quantity = cartItemsRequestModel.getQuantity();
-//        this.cart = cart;
+        this.cart = cart;
     }
 }
 

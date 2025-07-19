@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.example.springshop.model.Order;
 import org.example.springshop.model.OrderItems;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,25 +20,20 @@ public class OrderResponseModel {
     private Long userId;
     @JsonProperty("user_name")
     private String userName;
-    //    @JsonProperty("user_address")
-//    private String userAddress;
-    @JsonProperty("product_id")
-    private Long productId;
-    @JsonProperty("product_name")
-    private String productName;
-    @JsonProperty("product_count")
-    private Long productCount;
-    @JsonProperty("price_of_order")
-    private Long price_of_order;
+    @JsonProperty("totalAmount")
+    private Long totalAmount;
     @JsonProperty("orderItems")
     private List<OrderItems> orderItems;
+    @JsonProperty("paymentDate")
+    private LocalDateTime paymentDate;
 
     @Builder
     public OrderResponseModel(Order order) {
         this.id = order.getId();
         this.userId = order.getUser().getId();
-//        this.userAddress= user.getAddress()
+        this.totalAmount = order.getTotalAmount();
         this.userName = order.getUser().getName();
-        this.price_of_order = order.getTotalAmount();
+        this.orderItems = order.getOrderItems();
+        this.paymentDate = order.getPaymentAt();
     }
 }

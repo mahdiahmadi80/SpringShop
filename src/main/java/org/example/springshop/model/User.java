@@ -1,20 +1,22 @@
 package org.example.springshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.List;
-
+import java.time.LocalDateTime;
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_USER")
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,32 +40,24 @@ public class User {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "USER_ROLE")
     private UserRole role;
+    @CreationTimestamp
+    @Column(name = "CREATED_AT")
+    private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL)
-    private Address address;
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Comment> comments;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<FavoriteItem> favoriteItem;
-//    private Order order;
-//    private Cart cart;
-//    @Column(name = "Test")
-//    private String test ;
+    @UpdateTimestamp
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
 
     @Builder(builderClassName = "UserClass", builderMethodName = "userBuilder")
-    public User(UserRequestModel userRequestModel, Address address) {
+    public User(UserRequestModel userRequestModel) {
         this.name = userRequestModel.getName();
         this.lastName = userRequestModel.getLastName();
         this.password = userRequestModel.getPassword();
         this.email = userRequestModel.getEmail();
         this.phoneNumber = userRequestModel.getPhoneNumber();
-        this.nationalCode = userRequestModel.getNationalcode();
+        this.nationalCode = userRequestModel.getNationalCode();
         this.profilePicture = userRequestModel.getProfilePicture();
         this.role = userRequestModel.getUserRole();
-        this.address = address;
-//        this.test= String.valueOf(Optional.of(test));
     }
 }
 

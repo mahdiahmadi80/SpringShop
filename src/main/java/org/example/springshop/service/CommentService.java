@@ -41,10 +41,8 @@ public class CommentService {
     public CommentResponseModel addComment(CommentRequestModel commentRequestModel) {
         User user = userRepository.findById(commentRequestModel.getUser_id()).orElseThrow(() -> new UserNotFoundException("user not found"));
         Product product = productRepository.findById(commentRequestModel.getProduct_id()).orElseThrow(() -> new ProductNotFoundException("product not found"));
-
         Comment comment = Comment.commentBuilder().commentRequestModel(commentRequestModel).user(user).product(product).build();
         commentRepository.save(comment);
-
         return CommentResponseModel.builder().comment(comment).build();
     }
 

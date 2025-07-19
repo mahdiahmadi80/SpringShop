@@ -23,11 +23,17 @@ public class UserRequestModel {
     @JsonProperty("phoneNumber")
     private String phoneNumber;
     @JsonProperty("nationalCode")
-    private String nationalcode;
+    private String nationalCode;
     @JsonProperty("profilePicture")
     private String profilePicture;
     @JsonProperty("user_role")
     private UserRole userRole;
-    @JsonProperty("addressId")
-    private Long addressId;
+    @JsonProperty("country")
+    private String country;
+    @JsonProperty("city")
+    private String city;
+    @JsonProperty("number")
+    private Long number;
+    @JsonProperty("postNumber")
+    private Long postNumber;
 }

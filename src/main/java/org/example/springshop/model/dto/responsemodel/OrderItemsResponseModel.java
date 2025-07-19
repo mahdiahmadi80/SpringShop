@@ -16,8 +16,6 @@ public class OrderItemsResponseModel {
     private Long amount;
     @JsonProperty("product_name")
     private String productName;
-//    @JsonProperty("order")
-//    private Order order;
 
 
     @Builder
