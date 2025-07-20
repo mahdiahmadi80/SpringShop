@@ -33,7 +33,7 @@ public class OrderResponseModel {
         this.userId = order.getUser().getId();
         this.totalAmount = order.getTotalAmount();
         this.userName = order.getUser().getName();
-        this.orderItems = order.getOrderItems();
+//        this.orderItems = order.getOrderItems();
         this.paymentDate = order.getPaymentAt();
     }
 }

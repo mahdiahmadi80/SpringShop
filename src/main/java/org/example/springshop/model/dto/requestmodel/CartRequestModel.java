@@ -15,6 +15,7 @@ public class CartRequestModel {
     private Long id;
     @JsonProperty("user_id")
     private Long userId;
-    @JsonProperty("cartItems")
-    private List<CartItemsRequestModel> cartItems;
+    @JsonProperty("itemList")
+    private List<CartItemsRequestModel> listItem;
+
 }

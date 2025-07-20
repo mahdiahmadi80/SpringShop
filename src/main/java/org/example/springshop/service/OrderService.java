@@ -1,13 +1,11 @@
 package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
+import org.example.springshop.exception.Address.AddressException;
 import org.example.springshop.exception.CartNotFoundException;
 import org.example.springshop.exception.orderException.OrderNotFoundException;
-import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.*;
-import org.example.springshop.model.dto.requestmodel.OrderItemsRequestModel;
-import org.example.springshop.model.dto.requestmodel.OrderRequestModel;
 import org.example.springshop.model.dto.responsemodel.OrderResponseModel;
 import org.example.springshop.repository.*;
 import org.springframework.stereotype.Service;
@@ -21,21 +19,24 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private final ProductRepository productRepository;
     private final WalletRepository walletRepository;
     private final CartRepository cartRepository;
     private final WalletService walletService;
     private final ProductService productService;
+    private final CartItemsRepository cartItemsRepository;
+    private final OrderItemsRepository orderItemsRepository;
+    private final AddressRepository addressRepository;
 
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepository, WalletService walletService, WalletRepository walletRepository, CartRepository cartRepository, ProductService productService) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, WalletService walletService, WalletRepository walletRepository, CartRepository cartRepository, ProductService productService, CartItemsRepository cartItemsRepository, OrderItemsRepository orderItemsRepository, AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
-        this.productRepository = productRepository;
-
         this.walletRepository = walletRepository;
         this.cartRepository = cartRepository;
         this.walletService = walletService;
         this.productService = productService;
+        this.cartItemsRepository = cartItemsRepository;
+        this.orderItemsRepository = orderItemsRepository;
+        this.addressRepository = addressRepository;
     }
 
     public List<OrderResponseModel> listOrder() {
@@ -50,68 +51,66 @@ public class OrderService {
 //    @Transactional
 //    public OrderResponseModel addOrder(OrderRequestModel orderRequestModel) {
 //        User user = userRepository.findById(orderRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
-//        List<OrderItems> orderItemsList = new ArrayList<>();
-//        Order order = Order.orderBuilder().user(user).orderItems(orderItemsList).build();
+//        Order order = Order.orderBuilder().user(user).build();
 //
 //        Long totalAmount = 0L;
-//        OrderItems orderItems = null;
 //        for (OrderItemsRequestModel orderItemsRequestModel : orderRequestModel.getOrderItems()) {
 //            Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
 //            Long quantity = orderItemsRequestModel.getQuantity();
-//            checkQuantity(product, quantity);
-//            totalAmount += totalPrice(product, quantity);
-//            orderItems = OrderItems.orderItemsBuilder().product(product).orderItemsRequestModel(orderItemsRequestModel).amount(totalAmount).order(order).build();
-//            updateQuantity(product, quantity);
-//            System.out.println("Product ID: " + orderItems.getProduct().getId());
+//            totalAmount += productService.itemPrice(product, quantity);
+//            productService.checkQuantity(product, quantity);
+//            OrderItems orderItems = OrderItems.orderItemsBuilder().product(product).amount(totalAmount).order(order).build();
+//            productService.updateQuantity(product, quantity);
+//            orderItems.setQuantity(orderItemsRequestModel.getQuantity());
+//            walletService.checkWallet(user, totalAmount);
+//            walletService.deduceWallet(order, totalAmount);
+//            order.setUser(user);
+//            order.setTotalAmount(totalAmount);
+//            orderRepository.save(order);
 //            orderItemsRepository.save(orderItems);
-//            orderItemsList.add(orderItems);
 //        }
-//        checkWallet(user, totalAmount);
-//        deduceBalance(user, totalAmount);
-//        order.setUser(user);
-//        order.setOrderItems(orderItemsList);
-//        order.setTotalAmount(totalAmount);
 //
-//        orderRepository.save(order);
 //        return OrderResponseModel.builder().order(order).build();
 //    }
 
 
     @Transactional
-    public OrderResponseModel editOrder(Long id, OrderRequestModel orderRequestModel) {
-        Order updateOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("order not found"));
-        updateOrder.setUser(updateOrder.getUser());
-        for (OrderItems items : updateOrder.getOrderItems()) {
-            Product product = items.getProduct();
-            product.setInventory(backProduct(product, items));
-            productRepository.save(product);
-        }
-        updateOrder.getOrderItems().clear();
-        List<OrderItems> orderItemsList = new ArrayList<>();
-
-        Long totalAmount = 0L;
-        for (OrderItemsRequestModel orderItemsRequestModel : orderRequestModel.getOrderItems()) {
-
-            Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow(()->new ProductNotFoundException("product not found"));
-            Long quantity = orderItemsRequestModel.getQuantity();
-            productService.checkQuantity(product, quantity);
-
-            totalAmount += product.getPrice() * quantity;
-            product.setInventory(product.getInventory() - quantity);
-            productRepository.save(product);
-            OrderItems orderItems = OrderItems.orderItemsBuilder().order(updateOrder).quantity(quantity).product(product).amount(totalAmount).build();
-            orderItemsList.add(orderItems);
-        }
-
-
-        updateOrder.setOrderItems(orderItemsList);
-        updateOrder.setTotalAmount(totalAmount);
-        orderRepository.save(updateOrder);
-        return OrderResponseModel.builder().order(updateOrder).build();
-    }
+//    public OrderResponseModel editOrder(Long id, OrderRequestModel orderRequestModel) {
+//        Order updateOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("order not found"));
+//        updateOrder.setUser(updateOrder.getUser());
+//        for (OrderItems items : updateOrder.getOrderItems()) {
+//            Product product = items.getProduct();
+//            product.setInventory(backProduct(product, items));
+//            productRepository.save(product);
+//        }
+//        updateOrder.getOrderItems().clear();
+//        List<OrderItems> orderItemsList = new ArrayList<>();
+//
+//        Long totalAmount = 0L;
+//        for (OrderItemsRequestModel orderItemsRequestModel : orderRequestModel.getOrderItems()) {
+//
+//            Product product = productRepository.findById(orderItemsRequestModel.getProductId()).orElseThrow(()->new ProductNotFoundException("product not found"));
+//            Long quantity = orderItemsRequestModel.getQuantity();
+//            productService.checkQuantity(product, quantity);
+//
+//            totalAmount += product.getPrice() * quantity;
+//            product.setInventory(product.getInventory() - quantity);
+//            productRepository.save(product);
+//            OrderItems orderItems = OrderItems.orderItemsBuilder().order(updateOrder).quantity(quantity).product(product).amount(totalAmount).build();
+//            orderItemsList.add(orderItems);
+//        }
+//
+//
+//        updateOrder.setOrderItems(orderItemsList);
+//        updateOrder.setTotalAmount(totalAmount);
+//        orderRepository.save(updateOrder);
+//        return OrderResponseModel.builder().order(updateOrder).build();
+//    }
 
     public String orderDelete(Long id) {
-        orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException("order not found"));
+        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException("order not found"));
+        List<OrderItems> orderItemsList = orderItemsRepository.findByOrderListId(order.getId());
+        orderItemsRepository.deleteAll(orderItemsList);
         orderRepository.deleteById(id);
         return "your order deleted";
     }
@@ -151,10 +150,12 @@ public class OrderService {
     @Transactional
     public OrderResponseModel checkOutCart(Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("cart not found"));
-        User user = userRepository.findById(cart.getUser().getId()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        List<CartItems> cartItemsList = cart.getCartItems();
+        List<CartItems> cartItemsList = cartItemsRepository.findByCartListId(cart.getId());
 
-        List<OrderItems> orderItemsList = new ArrayList<>();
+        User user = userRepository.findById(cart.getUser().getId()).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Address address = addressRepository.findAddressByUserId(user.getId()).orElseThrow(() -> new AddressException("address not found"));
+        Order order = Order.orderBuilder().user(user).address(address).build();
+
         Long totalAmount = 0L;
         for (CartItems cartItems : cartItemsList) {
             Product product = cartItems.getProduct();
@@ -164,14 +165,20 @@ public class OrderService {
             totalAmount += itemPrice;
             productService.updateQuantity(product, quantity);
             OrderItems orderItems = OrderItems.orderItemsBuilder().amount(itemPrice).product(product).quantity(quantity).build();
-            orderItemsList.add(orderItems);
+            orderItemsRepository.save(orderItems);
         }
-        Order order = Order.orderBuilder().user(user).totalAmount(totalAmount).orderItems(orderItemsList).build();
+
+        order.setTotalAmount(totalAmount);
+        orderRepository.save(order);
+        List<OrderItems> orderItemsList = orderItemsRepository.findByOrderListId(order.getId());
+
         for (OrderItems orderItems : orderItemsList) {
             orderItems.setOrder(order);
         }
+
+        cartItemsRepository.deleteAll(cartItemsList);
         cartRepository.deleteById(cart.getId());
-        orderRepository.save(order);
+
         return OrderResponseModel.builder().order(order).build();
     }
 }

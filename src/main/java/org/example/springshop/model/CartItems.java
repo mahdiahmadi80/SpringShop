@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.dto.requestmodel.CartItemsRequestModel;
+import org.example.springshop.model.dto.requestmodel.CartRequestModel;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,9 +30,8 @@ public class CartItems {
     private Cart cart;
 
     @Builder(builderClassName = "CartItemsClass", builderMethodName = "cartItemsBuilder")
-    public CartItems(CartItemsRequestModel cartItemsRequestModel, Product product, Cart cart) {
+    public CartItems(Product product, Cart cart) {
         this.product = product;
-        this.quantity = cartItemsRequestModel.getQuantity();
         this.cart = cart;
     }
 }

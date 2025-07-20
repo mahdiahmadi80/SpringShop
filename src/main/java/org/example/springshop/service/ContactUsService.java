@@ -26,7 +26,6 @@ public class ContactUsService {
     public ContactUsResponseModel addContactUs(ContactUsRequestModel contactUsRequestModel) {
         User user = userRepository.findById(contactUsRequestModel.getUser()).orElseThrow(()->new UserNotFoundException("user not found"));
         ContactUs contactUs = ContactUs.contactUsBuilder().contactUsRequestModel(contactUsRequestModel).user(user).build();
-
         contactUsRepository.save(contactUs);
         return ContactUsResponseModel.builder().contactUs(contactUs).build();
     }

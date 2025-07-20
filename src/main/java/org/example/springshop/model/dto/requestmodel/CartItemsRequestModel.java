@@ -15,7 +15,6 @@ public class CartItemsRequestModel {
     private Long productId;
     @JsonProperty("quantity")
     private Long quantity;
-//    @JsonProperty("cart_id")
-//    private Long cartId;
-
+    @JsonProperty("cart_id")
+    private Long cartId;
 }

@@ -26,13 +26,13 @@ public class FavoriteItemController {
         return favoriteItemService.addFavorite(favoriteItemRequestModel);
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public FavoriteItemResponseModel editFavoriteItem(@PathVariable Long id, @RequestBody FavoriteItemRequestModel favoriteItemRequestModel) {
-        return favoriteItemService.editList(id, favoriteItemRequestModel);
-    }
-
-    @DeleteMapping(value = "/delete/{id}")
-    public String deleteList(@PathVariable Long id) {
-        return favoriteItemService.deleteFavoriteList(id);
-    }
+//    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+//    public FavoriteItemResponseModel editFavoriteItem(@PathVariable Long id, @RequestBody FavoriteItemRequestModel favoriteItemRequestModel) {
+//        return favoriteItemService.editList(id, favoriteItemRequestModel);
+//    }
+//
+//    @DeleteMapping(value = "/delete/{id}")
+//    public String deleteList(@PathVariable Long id) {
+//        return favoriteItemService.deleteFavoriteList(id);
+//    }
 }

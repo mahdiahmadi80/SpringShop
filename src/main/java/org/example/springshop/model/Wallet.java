@@ -20,23 +20,17 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-
     @OneToOne
     @JoinColumn(name = "USER_ID")
     private User userId;
-
     @Column(name = "BALANCE")
     private Long balance;
-
     @CreationTimestamp
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
-
-
     @Builder(builderClassName = "UserWalletClass", builderMethodName = "userWalletClass")
     public Wallet(User user) {
         this.balance = 0L;

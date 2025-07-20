@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
@@ -25,26 +24,22 @@ public class Order {
     private User user;
     @Column(name = "TOTALAMOUNT")
     private Long totalAmount;
-
     @Column(name = "PAYMENT")
     private boolean payment;
-
     @Column(name = "CREATED_AT")
     @CreationTimestamp
     private LocalDateTime createdAt;
-
     @Column(name = "PAYMENT_AT")
     private LocalDateTime paymentAt;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderItems> orderItems;
+    @ManyToOne
+    @JoinColumn(name = "ADDRESS_ID")
+    private Address address;
 
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
-    public Order(User user, Long totalAmount, List<OrderItems> orderItems) {
+    public Order(User user, Long totalAmount,Address address) {
         this.user = user;
         this.totalAmount = totalAmount;
-        this.orderItems = orderItems;
         this.payment = false;
-
+        this.address = address;
     }
 }

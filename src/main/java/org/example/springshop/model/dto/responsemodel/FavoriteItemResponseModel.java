@@ -17,11 +17,11 @@ public class FavoriteItemResponseModel {
     @JsonProperty("user_id")
     private Long userId;
     @JsonProperty("product_id")
-    private Optional<List<Product>> productId;
+    private Product productId;
 
     @Builder
     public FavoriteItemResponseModel(FavoriteItem favoriteItem) {
         this.userId = favoriteItem.getUser().getId();
-        this.productId = Optional.ofNullable(favoriteItem.getProduct());
+//this.productId = favoriteItem.getProduct();
     }
 }

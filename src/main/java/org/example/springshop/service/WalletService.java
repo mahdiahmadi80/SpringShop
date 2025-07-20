@@ -1,7 +1,6 @@
 package org.example.springshop.service;
 
 import org.example.springshop.exception.walletException.BalanceException;
-import org.example.springshop.exception.walletException.NotEnoughBalanceException;
 import org.example.springshop.exception.walletException.WalletNotFoundException;
 import org.example.springshop.model.Order;
 import org.example.springshop.model.User;
@@ -56,13 +55,6 @@ public class WalletService {
         }
         walletRepository.save(wallet);
         return WalletResponseModel.builder().wallet(wallet).build();
-    }
-    public void checkWallet(User user, Long totalAmount) {
-        Wallet wallet = walletRepository.findWalletByUserId(user.getId()).orElseThrow(() -> new WalletNotFoundException("wallet not found"));
-        Long walletBalance = wallet.getBalance() - totalAmount;
-        if (walletBalance < 0) {
-            throw new NotEnoughBalanceException("your balance not enough");
-        }
     }
     public String chargeWallet(Long id, WalletRequestModel walletRequestModel) {
         Wallet wallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("wallet not found"));

@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Entity
 @NoArgsConstructor
@@ -20,12 +18,10 @@ public class FavoriteItem {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-    @ManyToMany
-    private List<Product> product;
 
     @Builder(builderClassName = "FavoriteClass", builderMethodName = "favoriteBuilder")
-    public FavoriteItem(User user, List<Product> product) {
+    public FavoriteItem(User user, Product product) {
         this.user = user;
-        this.product = product;
+//        this.product = product;
     }
 }

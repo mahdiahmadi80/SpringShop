@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,13 +23,16 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CartItems> cartItems;
+    @CreationTimestamp
+    @Column(name = "CREATED_AT")
+    private LocalDateTime CreatedAt;
+    @UpdateTimestamp
+    @Column(name = "UPDATE_AT")
+    private LocalDateTime updateAt;
 
     @Builder(builderClassName = "CartBuilderClass", builderMethodName = "cartBuilder")
-    public Cart(User user, List<CartItems> cartItems) {
+
+    public Cart(User user) {
         this.user = user;
-        this.cartItems = cartItems;
     }
 }

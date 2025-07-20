@@ -15,7 +15,7 @@ public class CartItemsResponseModel {
     private Long userId;
     @JsonProperty("product_id")
     private Long productId;
-    @JsonProperty("cart")
+    @JsonProperty("cart_id")
     private Long cart;
 
     @Builder

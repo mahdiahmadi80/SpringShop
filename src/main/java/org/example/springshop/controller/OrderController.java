@@ -26,10 +26,10 @@ public class OrderController {
 //        return orderService.addOrder(orderRequestModel);
 //    }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public OrderResponseModel orderEdit(@PathVariable Long id, @RequestBody OrderRequestModel orderRequestModel) {
-        return orderService.editOrder(id, orderRequestModel);
-    }
+//    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+//    public OrderResponseModel orderEdit(@PathVariable Long id, @RequestBody OrderRequestModel orderRequestModel) {
+//        return orderService.editOrder(id, orderRequestModel);
+//    }
 //    @RequestMapping(value = "/off/{id}", method = RequestMethod.POST)
 //    public OrderResponseModel offItem(@PathVariable Long id) {
 //        return orderService.offItem(id);
