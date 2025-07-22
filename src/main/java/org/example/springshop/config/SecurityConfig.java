@@ -46,7 +46,6 @@ public class SecurityConfig {
             throw new RuntimeException(e);
         }
     }
-
     //for MD5
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -76,7 +75,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
     //for uncode hash password
     @Bean
     public AuthenticationProvider authenticationProvider() {

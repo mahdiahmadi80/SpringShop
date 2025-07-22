@@ -1,4 +1,4 @@
-package org.example.springshop.exception;
+package org.example.springshop.exception.cartException;
 
 public class CartNotFoundException extends RuntimeException {
     public CartNotFoundException(String message) {

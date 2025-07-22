@@ -3,6 +3,7 @@ package org.example.springshop.controller;
 import org.example.springshop.model.dto.requestmodel.WalletRequestModel;
 import org.example.springshop.model.dto.responsemodel.WalletResponseModel;
 import org.example.springshop.service.WalletService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class WalletController {
 //        return walletService.deduceWallet(id, walletRequestModel);
 //    }
     @RequestMapping(value = "/charge/{id}", method = RequestMethod.POST)
-    public String chargeWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
+    public ResponseEntity<String> chargeWallet(@PathVariable Long id, @RequestBody WalletRequestModel walletRequestModel) {
         return walletService.chargeWallet(id, walletRequestModel);
     }
 //    @RequestMapping(value = "/transactions/{id}", method = RequestMethod.POST)

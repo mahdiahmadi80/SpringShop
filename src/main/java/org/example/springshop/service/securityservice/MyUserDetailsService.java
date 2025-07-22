@@ -1,5 +1,6 @@
 package org.example.springshop.service.securityservice;
 
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.User;
 import org.example.springshop.model.UserPrincipal;
@@ -20,7 +21,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userRepository.findByName(username).orElseThrow(() -> new UserNotFoundException(ExceptionMessage.userNotFound));
         return new UserPrincipal(user);
     }
 }

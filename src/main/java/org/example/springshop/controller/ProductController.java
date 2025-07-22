@@ -3,6 +3,7 @@ package org.example.springshop.controller;
 import org.example.springshop.model.dto.requestmodel.ProductRequestModel;
 import org.example.springshop.model.dto.responsemodel.ProductResponseModel;
 import org.example.springshop.service.ProductService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

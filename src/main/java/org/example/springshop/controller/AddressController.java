@@ -1,7 +1,9 @@
 package org.example.springshop.controller;
 import org.example.springshop.model.dto.requestmodel.AddressRequestModel;
+import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 import org.example.springshop.model.dto.responsemodel.AddressResponseModel;
 import org.example.springshop.service.AddressService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
@@ -20,17 +22,17 @@ public class AddressController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public AddressResponseModel addAddress(@RequestBody AddressRequestModel addressRequestModel) {
-        return addressService.addAddress(addressRequestModel);
+    public AddressResponseModel addAddress(@RequestBody UserRequestModel userRequestModel) {
+        return addressService.addAddress(userRequestModel);
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public AddressResponseModel editAddress(@PathVariable Long id, @RequestBody AddressRequestModel addressRequestModel) {
-        return addressService.editAddress(id, addressRequestModel);
+    @RequestMapping(value = "/edit/**", method = RequestMethod.POST)
+    public AddressResponseModel editAddress( @RequestBody AddressRequestModel addressRequestModel) {
+        return addressService.editAddress(addressRequestModel);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public String deleteAddress(@PathVariable Long id) {
+    public ResponseEntity<String> deleteAddress(@PathVariable Long id) {
         return addressService.deleteAddress(id);
     }
 }

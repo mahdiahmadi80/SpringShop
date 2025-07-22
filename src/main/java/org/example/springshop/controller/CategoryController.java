@@ -27,15 +27,15 @@ public class CategoryController {
         return categoryService.addCategory(categoryRequestModel);
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public CategoryResponseModel editCategory(@PathVariable Long id, @RequestBody CategoryRequestModel categoryRequestModel) {
-        return categoryService.editCategory(id, categoryRequestModel);
+    @RequestMapping(value = "/edit/**", method = RequestMethod.POST)
+    public CategoryResponseModel editCategory( @RequestBody CategoryRequestModel categoryRequestModel) {
+        return categoryService.editCategory(categoryRequestModel);
     }
 
     @RequestMapping(value = "show/{id}")
     public CategoryResponseModel showProducts(@PathVariable Long id){
         return categoryService.showProduct(id);
-    }//todo
+    }
     @DeleteMapping(value = "/delete/{id}")
     public String deleteCategory(@PathVariable Long id) {
         return categoryService.deleteCategory(id);

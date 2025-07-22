@@ -22,8 +22,6 @@ public class OrderResponseModel {
     private String userName;
     @JsonProperty("totalAmount")
     private Long totalAmount;
-    @JsonProperty("orderItems")
-    private List<OrderItems> orderItems;
     @JsonProperty("paymentDate")
     private LocalDateTime paymentDate;
 
@@ -33,7 +31,6 @@ public class OrderResponseModel {
         this.userId = order.getUser().getId();
         this.totalAmount = order.getTotalAmount();
         this.userName = order.getUser().getName();
-//        this.orderItems = order.getOrderItems();
         this.paymentDate = order.getPaymentAt();
     }
 }

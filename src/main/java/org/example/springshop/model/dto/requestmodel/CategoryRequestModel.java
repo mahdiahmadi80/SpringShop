@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryRequestModel {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")

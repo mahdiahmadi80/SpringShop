@@ -1,5 +1,6 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.categoryException.CategoryNotFoundException;
 import org.example.springshop.model.Category;
 import org.example.springshop.model.dto.requestmodel.CategoryRequestModel;
@@ -33,8 +34,8 @@ public class CategoryService {
         return CategoryResponseModel.builder().category(category).build();
     }
 
-    public CategoryResponseModel editCategory(Long id, CategoryRequestModel categoryRequestModel) {
-        Category updatCategory = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException("category not found"));
+    public CategoryResponseModel editCategory(CategoryRequestModel categoryRequestModel) {
+        Category updatCategory = categoryRepository.findById(categoryRequestModel.getId()).orElseThrow(() -> new CategoryNotFoundException(ExceptionMessage.categoryNotFound));
         updatCategory.setName(categoryRequestModel.getName());
         updatCategory.setDescription(categoryRequestModel.getDescription());
         return CategoryResponseModel.builder().category(updatCategory).build();

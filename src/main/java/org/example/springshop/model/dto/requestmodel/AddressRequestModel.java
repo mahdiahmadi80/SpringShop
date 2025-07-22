@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressRequestModel {
-
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("country")
     private String country;
     @JsonProperty("city")
     private String city;
     @JsonProperty("number")
     private Long number;
-    @JsonProperty("postnumber")
+    @JsonProperty("postNumber")
     private Long postNumber;
     @JsonProperty("user_id")
     private Long userId;

@@ -1,7 +1,8 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.categoryException.CategoryNotFoundException;
-import org.example.springshop.exception.orderException.OrderAddFailException;
+import org.example.springshop.exception.productException.ProductException;
 import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.model.Category;
 import org.example.springshop.model.Product;
@@ -43,7 +44,7 @@ public class ProductService {
     }
 
     public ProductResponseModel editProduct(Long id, ProductRequestModel productRequestModel) {
-        Product updateProduct = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("product not found"));
+        Product updateProduct = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.productNotFound));
         if (productRequestModel.getName() != null) {
             updateProduct.setName(productRequestModel.getName());
         }
@@ -66,7 +67,7 @@ public class ProductService {
 
     public String deleteProduct(Long id) {
         productRepository.deleteById(id);
-        return "product is deleted";
+        return ExceptionMessage.deleteSuccessful;
     }
 
     public Long itemPrice(Product product, Long quantity) {
@@ -75,28 +76,26 @@ public class ProductService {
 
     public void checkQuantity(Product product, Long quantity) {
         if (quantity > product.getInventory()) {
-            throw new ProductNotFoundException("your count is over than inventory");
+            throw new ProductException(ExceptionMessage.productNotEnough);
         }
     }
 
     public void updateQuantity(Product product, Long count) {
         product.setInventory(product.getInventory() - count);
         if (product.getInventory() < 0) {
-            throw new OrderAddFailException("product not enough");
+            throw new ProductException(ExceptionMessage.productNotEnough);
         }
         productRepository.save(product);
     }
 
-
-
     public ProductResponseModel searchById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.walletNotFound));
         return ProductResponseModel.builder().product(product).build();
     }
 
     public List<ProductResponseModel> searchByProductName(String name) {
         List<ProductResponseModel> productResponseModels = new ArrayList<>();
-        productRepository.searchByProductName(name).forEach(product -> {
+        productRepository.findProductByName(name).forEach(product -> {
             ProductResponseModel productResponseModel = ProductResponseModel.builder().product(product).build();
             productResponseModels.add(productResponseModel);
         });

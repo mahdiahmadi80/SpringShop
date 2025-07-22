@@ -18,10 +18,13 @@ public class FavoriteItem {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
 
     @Builder(builderClassName = "FavoriteClass", builderMethodName = "favoriteBuilder")
     public FavoriteItem(User user, Product product) {
         this.user = user;
-//        this.product = product;
+        this.product = product;
     }
 }

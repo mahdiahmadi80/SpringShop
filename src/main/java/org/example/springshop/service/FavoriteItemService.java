@@ -1,5 +1,6 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.FavoriteItem;
@@ -37,8 +38,8 @@ public class FavoriteItemService {
     }
 
     public FavoriteItemResponseModel addFavorite(FavoriteItemRequestModel favoriteItemRequestModel) {
-        User user = userRepository.findById(favoriteItemRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Product product = productRepository.findById(favoriteItemRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException("product not found"));
+        User user = userRepository.findById(favoriteItemRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException(ExceptionMessage.userNotFound));
+        Product product = productRepository.findById(favoriteItemRequestModel.getProductId()).orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.productNotFound));
         FavoriteItem favoriteItem = FavoriteItem.favoriteBuilder().user(user).product(product).build();
         favoriteItemRepository.save(favoriteItem);
         return FavoriteItemResponseModel.builder().favoriteItem(favoriteItem).build();

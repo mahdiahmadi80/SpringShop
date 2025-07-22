@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.AddressRequestModel;
+import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 
 @Data
 @Entity
@@ -30,11 +31,11 @@ public class Address {
     private User userId;
 
     @Builder(builderClassName = "AddressClass", builderMethodName = "addressBuilder")
-    public Address(AddressRequestModel addressRequestModel,User user) {
-        this.country = addressRequestModel.getCountry();
-        this.city = addressRequestModel.getCity();
-        this.number = addressRequestModel.getNumber();
-        this.postNumber = addressRequestModel.getPostNumber();
+    public Address(UserRequestModel userRequestModel,User user) {
+        this.country = userRequestModel.getCountry();
+        this.city = userRequestModel.getCity();
+        this.number = userRequestModel.getNumber();
+        this.postNumber = userRequestModel.getPostNumber();
         this.userId = user;
     }
 }

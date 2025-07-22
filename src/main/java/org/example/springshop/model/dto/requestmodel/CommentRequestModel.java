@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentRequestModel {
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("comment")
     private String comment;
     @JsonProperty("star")

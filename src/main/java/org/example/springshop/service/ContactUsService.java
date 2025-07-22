@@ -1,5 +1,6 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.contactusException.MessageNotFoundException;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.ContactUs;
@@ -8,8 +9,11 @@ import org.example.springshop.model.dto.requestmodel.ContactUsRequestModel;
 import org.example.springshop.model.dto.responsemodel.ContactUsResponseModel;
 import org.example.springshop.repository.ContactUsRepository;
 import org.example.springshop.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +28,7 @@ public class ContactUsService {
     }
 
     public ContactUsResponseModel addContactUs(ContactUsRequestModel contactUsRequestModel) {
-        User user = userRepository.findById(contactUsRequestModel.getUser()).orElseThrow(()->new UserNotFoundException("user not found"));
+        User user = userRepository.findById(contactUsRequestModel.getUser()).orElseThrow(() -> new UserNotFoundException(ExceptionMessage.userNotFound));
         ContactUs contactUs = ContactUs.contactUsBuilder().contactUsRequestModel(contactUsRequestModel).user(user).build();
         contactUsRepository.save(contactUs);
         return ContactUsResponseModel.builder().contactUs(contactUs).build();
@@ -41,11 +45,11 @@ public class ContactUsService {
 
 
     public ContactUsResponseModel showContact(Long id) {
-        ContactUs contactUs = contactUsRepository.findById(id).orElseThrow(()->new MessageNotFoundException("this message not found"));
+        ContactUs contactUs = contactUsRepository.findById(id).orElseThrow(() -> new MessageNotFoundException(ExceptionMessage.messageNotFound));
         contactUs.setShowed(true);
+        contactUs.setShowMessageAt(LocalDateTime.now());
         contactUsRepository.save(contactUs);
         return ContactUsResponseModel.builder().contactUs(contactUs).build();
-
     }
 
     public List<ContactUsResponseModel> showUnreadContact() {
@@ -59,6 +63,6 @@ public class ContactUsService {
 
     public String deleteContact(Long id) {
         contactUsRepository.deleteById(id);
-        return "message deleted";
+        return ExceptionMessage.deleteSuccessful;
     }
 }

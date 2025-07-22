@@ -1,6 +1,7 @@
 package org.example.springshop.service;
 
 import jakarta.transaction.Transactional;
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.commentException.CommentNotfoundException;
 import org.example.springshop.exception.productException.ProductNotFoundException;
 import org.example.springshop.exception.userException.UserNotFoundException;
@@ -39,16 +40,16 @@ public class CommentService {
     }
 
     public CommentResponseModel addComment(CommentRequestModel commentRequestModel) {
-        User user = userRepository.findById(commentRequestModel.getUser_id()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Product product = productRepository.findById(commentRequestModel.getProduct_id()).orElseThrow(() -> new ProductNotFoundException("product not found"));
+        User user = userRepository.findById(commentRequestModel.getUser_id()).orElseThrow(() -> new UserNotFoundException(ExceptionMessage.userNotFound));
+        Product product = productRepository.findById(commentRequestModel.getProduct_id()).orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.productNotFound));
         Comment comment = Comment.commentBuilder().commentRequestModel(commentRequestModel).user(user).product(product).build();
         commentRepository.save(comment);
         return CommentResponseModel.builder().comment(comment).build();
     }
 
     @Transactional
-    public CommentResponseModel editComment(Long commentId, CommentRequestModel commentRequestModel) {
-        Comment updateComment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotfoundException("comment not found"));
+    public CommentResponseModel editComment(CommentRequestModel commentRequestModel) {
+        Comment updateComment = commentRepository.findById(commentRequestModel.getId()).orElseThrow(() -> new CommentNotfoundException(ExceptionMessage.commentNotFound));
         updateComment.setComment(commentRequestModel.getComment());
         updateComment.setStar(commentRequestModel.getStar());
         updateComment.setUser(updateComment.getUser());

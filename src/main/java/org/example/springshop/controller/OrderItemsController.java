@@ -27,15 +27,8 @@ public class OrderItemsController {
 //        return OrderItemsService.offItem(id);
 //    }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public OrderItemsResponseModel addOrderItems(@RequestBody OrderItemsRequestModel orderItemsRequestModel) {
-        return orderItemsService.addOrderItems(orderItemsRequestModel);
-    }
-//    @RequestMapping(value = "/edit/{id}")
-//    public OrderItemsResponseModel editOrderItem(@PathVariable Long id, @RequestBody OrderItemsRequestModel orderItemsRequestModel) {
-//        return orderItemsRepository.editOrderItem(id, orderItemsRequestModel);
+//    @RequestMapping(value = "/add", method = RequestMethod.POST)
+//    public OrderItemsResponseModel addOrderItems(@RequestBody OrderItemsRequestModel orderItemsRequestModel) {
+//        return orderItemsService.addOrderItems(orderItemsRequestModel);
 //    }
-
-
-
 }

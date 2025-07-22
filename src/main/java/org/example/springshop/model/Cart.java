@@ -31,7 +31,6 @@ public class Cart {
     private LocalDateTime updateAt;
 
     @Builder(builderClassName = "CartBuilderClass", builderMethodName = "cartBuilder")
-
     public Cart(User user) {
         this.user = user;
     }

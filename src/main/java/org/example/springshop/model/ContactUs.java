@@ -1,11 +1,16 @@
 package org.example.springshop.model;
 
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.dto.requestmodel.ContactUsRequestModel;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -26,8 +31,18 @@ public class ContactUs {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+    @CreationTimestamp
+    @Column(name = "CREATED_AT")
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
+    @Timestamp
+    @Column(name = "SHOWMESSAGE_AT")
+    private LocalDateTime showMessageAt;
 
     @Builder(builderClassName = "ContactUsClass", builderMethodName = "contactUsBuilder")
+
     public ContactUs(ContactUsRequestModel contactUsRequestModel, User user) {
         this.id = contactUsRequestModel.getId();
         this.subject = contactUsRequestModel.getSubject();

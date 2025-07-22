@@ -10,6 +10,10 @@ import java.util.List;
 public interface ContactUsRepository extends JpaRepository<ContactUs, Long> {
 
     ContactUs findByShowed(boolean showed);
+
+
     @Query(value = "SELECT * from tbl_contactus where showed = false",nativeQuery = true)
     List<ContactUs> findByShowed();
+
+
 }

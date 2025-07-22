@@ -24,7 +24,6 @@ public class ProductResponseModel {
     private String description;
     @JsonProperty("image")
     private String image;
-
     @Builder
     public ProductResponseModel(Product product) {
         this.id = product.getId();

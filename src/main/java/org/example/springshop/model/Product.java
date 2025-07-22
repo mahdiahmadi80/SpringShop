@@ -53,4 +53,8 @@ public class Product {
         this.image = request.getImage();
         this.category = category;
     }
+
+    public Long backProduct(Product product, OrderItems orderItems) {
+        return product.getInventory() + orderItems.getQuantity();
+    }
 }

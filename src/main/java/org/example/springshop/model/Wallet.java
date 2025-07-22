@@ -20,6 +20,7 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
     @OneToOne
     @JoinColumn(name = "USER_ID")
     private User userId;

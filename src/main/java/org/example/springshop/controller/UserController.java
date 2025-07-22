@@ -29,9 +29,9 @@ public class UserController {
         return userService.addUser(userRequestModel);
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public UserResponseModel editUser(@PathVariable Long id, @RequestBody UserRequestModel userRequestModel) {
-        return userService.editUser(id, userRequestModel);
+    @RequestMapping(value = "/edit/**", method = RequestMethod.POST)
+    public UserResponseModel editUser(@RequestBody UserRequestModel userRequestModel) {
+        return userService.editUser(userRequestModel);
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -39,9 +39,9 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
-    @RequestMapping(value = "/signup/{id}", method = RequestMethod.POST)
-    public UserResponseModel signupUser(@PathVariable Long id, @RequestBody UserRequestModel userRequestModel) {
-        return userService.signUpUser(id, userRequestModel);
+    @RequestMapping(value = "/signup/**", method = RequestMethod.POST)
+    public UserResponseModel signupUser(@RequestBody UserRequestModel userRequestModel) {
+        return userService.signUpUser(userRequestModel);
     }
 
     @RequestMapping(value = "/search/id/{id}", method = RequestMethod.GET)
@@ -53,6 +53,7 @@ public class UserController {
     public UserResponseModel searchUserByNationalCode(@PathVariable String nationalCode) {
         return userService.searchByNationalCode(nationalCode);
     }
+
     @RequestMapping(value = "/search/phonenumber/{phoneNumber}", method = RequestMethod.GET)
     public UserResponseModel searchUserByPhoneNumber(@PathVariable String phoneNumber) {
         return userService.searchByPhoneNumber(phoneNumber);
@@ -82,5 +83,6 @@ public class UserController {
     public String login(@RequestBody UserRequestModel userRequestModel) {
         return userService.verify(userRequestModel);
     }
+
 
 }

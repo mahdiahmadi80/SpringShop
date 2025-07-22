@@ -1,12 +1,16 @@
 package org.example.springshop.service;
 
+import org.example.springshop.exception.Address.AddressException;
+import org.example.springshop.exception.ExceptionMessage;
 import org.example.springshop.exception.userException.UserNotFoundException;
 import org.example.springshop.model.Address;
 import org.example.springshop.model.User;
 import org.example.springshop.model.dto.requestmodel.AddressRequestModel;
+import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 import org.example.springshop.model.dto.responsemodel.AddressResponseModel;
 import org.example.springshop.repository.AddressRepository;
 import org.example.springshop.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,15 +35,16 @@ public class AddressService {
         return addressResponseModels;
     }
 
-    public AddressResponseModel addAddress(AddressRequestModel addressRequestModel) {
-        User user = userRepository.findById(addressRequestModel.getUserId()).orElseThrow(() -> new UserNotFoundException("user not found"));
-        Address address = Address.addressBuilder().addressRequestModel(addressRequestModel).user(user).build();
-            addressRepository.save(address);
-            return AddressResponseModel.builder().address(address).build();
+    public AddressResponseModel addAddress(UserRequestModel userRequestModel) {
+        User user = userRepository.findById(userRequestModel.getId()).orElseThrow(() -> new UserNotFoundException(ExceptionMessage.userNotFound));
+        Address address = Address.addressBuilder().userRequestModel(userRequestModel).user(user).build();
+
+        addressRepository.save(address);
+        return AddressResponseModel.builder().address(address).build();
     }
 
-    public AddressResponseModel editAddress(Long id, AddressRequestModel addressRequestModel) {
-        Address updateAddress = addressRepository.findById(id).orElseThrow();
+    public AddressResponseModel editAddress(AddressRequestModel addressRequestModel) {
+        Address updateAddress = addressRepository.findById(addressRequestModel.getId()).orElseThrow(() -> new AddressException(ExceptionMessage.addressNotFound));
         updateAddress.setCountry(addressRequestModel.getCountry());
         updateAddress.setCity(addressRequestModel.getCity());
         updateAddress.setNumber(addressRequestModel.getNumber());
@@ -48,8 +53,8 @@ public class AddressService {
         return AddressResponseModel.builder().address(updateAddress).build();
     }
 
-    public String deleteAddress(Long id) {
+    public ResponseEntity<String> deleteAddress(Long id) {
         addressRepository.deleteById(id);
-        return "address is deleted";
+        return ResponseEntity.ok(ExceptionMessage.deleteSuccessful);
     }
 }

@@ -24,8 +24,8 @@ public class Order {
     private User user;
     @Column(name = "TOTALAMOUNT")
     private Long totalAmount;
-    @Column(name = "PAYMENT")
-    private boolean payment;
+    @Column(name = "PAY")
+    private boolean isPay;
     @Column(name = "CREATED_AT")
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -39,7 +39,7 @@ public class Order {
     public Order(User user, Long totalAmount,Address address) {
         this.user = user;
         this.totalAmount = totalAmount;
-        this.payment = false;
+        this.isPay = false;
         this.address = address;
     }
 }
