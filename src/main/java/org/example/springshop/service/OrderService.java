@@ -85,7 +85,7 @@ public class OrderService {
         }
         return ExceptionMessage.paySuccessful;
     }
-
+@Transactional
     public String cancelingOrder(Long id) {
         Order order = orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException(ExceptionMessage.orderNotFound));
         if (order.isPay()) {
@@ -93,9 +93,9 @@ public class OrderService {
                 Product product = productRepository.findById(orderItems.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.productNotFound));
                 product.setInventory(product.backProduct(product, orderItems));
                 productRepository.save(product);
-                backBalance(order, order.getTotalAmount());
-                orderItemsRepository.deleteAll();
+                orderItemsRepository.deleteAllByOrder(order);
             });
+            backBalance(order, order.getTotalAmount());
             orderRepository.deleteById(id);
             return ExceptionMessage.cancelOrderSuccessful;
         }
@@ -105,10 +105,16 @@ public class OrderService {
     @Transactional
     public OrderResponseModel checkOutCart(Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(ExceptionMessage.cartNotFound));
+
         List<CartItems> cartItemsList = cartItemsRepository.findByCart(cart);
+
+
         User user = userRepository.findById(cart.getUser().getId()).orElseThrow(() -> new UserNotFoundException(ExceptionMessage.userNotFound));
         Address address = addressRepository.findByUserId(user).orElseThrow(() -> new AddressException(ExceptionMessage.addressNotFound));
-        Order order = Order.orderBuilder().user(user).address(address).build();
+
+
+        Order order = Order.orderBuilder().user(user).address(address).totalAmount(0L).build();
+//            orderRepository.save(order);
         Long totalAmount = 0L;
         for (CartItems cartItems : cartItemsList) {
             Product product = cartItems.getProduct();
@@ -117,8 +123,9 @@ public class OrderService {
             Long itemPrice = productService.itemPrice(product, quantity);
             totalAmount += itemPrice;
             productService.updateQuantity(product, quantity);
-            OrderItems orderItems = OrderItems.orderItemsBuilder().amount(itemPrice).product(product).quantity(quantity).build();
-            orderItems.setOrder(order);
+            OrderItems orderItems = OrderItems.orderItemsBuilder().amount(itemPrice).product(product).quantity(quantity).order(order).build();
+//            orderItems.setOrder(order);
+            orderRepository.save(order);
             orderItemsRepository.save(orderItems);
         }
         order.setTotalAmount(totalAmount);

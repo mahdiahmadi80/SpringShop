@@ -12,8 +12,6 @@ import org.example.springshop.model.dto.responsemodel.UserResponseModel;
 import org.example.springshop.repository.UserRepository;
 import org.example.springshop.repository.WalletRepository;
 import org.example.springshop.service.securityservice.JWTService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -84,7 +82,6 @@ public class UserService {
         return UserResponseModel.builder().user(user).build();
     }
 
-
     @Transactional
     public String deleteUser(Long id) {
         User user = searchUser(id);
@@ -149,9 +146,4 @@ public class UserService {
         });
         return userResponseModels;
     }
-
-//    public Address findAddressByUserId(Long id) {
-//        return addressRepository.findAddressByUserId(id).orElseThrow(() -> new AddressException(ExceptionMessage.addressNotFound));
-//    }
-
 }
