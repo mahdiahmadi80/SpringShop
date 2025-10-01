@@ -36,7 +36,8 @@ public class Order {
     private Address address;
 
     @Builder(builderClassName = "OrderClass", builderMethodName = "orderBuilder")
-    public Order(User user, Long totalAmount,Address address) {
+    public Order(User user, Long totalAmount, Address address, Long id) {
+        this.id = id;
         this.user = user;
         this.totalAmount = totalAmount;
         this.isPay = false;

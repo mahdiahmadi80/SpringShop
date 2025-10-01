@@ -14,6 +14,7 @@ import org.example.springshop.repository.WalletRepository;
 import org.example.springshop.service.securityservice.JWTService;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

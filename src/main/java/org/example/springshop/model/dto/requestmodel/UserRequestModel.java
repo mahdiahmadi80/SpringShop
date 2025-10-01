@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.springshop.model.UserRole;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 @NoArgsConstructor
 @AllArgsConstructor

@@ -42,7 +42,6 @@ public class ContactUs {
     private LocalDateTime showMessageAt;
 
     @Builder(builderClassName = "ContactUsClass", builderMethodName = "contactUsBuilder")
-
     public ContactUs(ContactUsRequestModel contactUsRequestModel, User user) {
         this.id = contactUsRequestModel.getId();
         this.subject = contactUsRequestModel.getSubject();

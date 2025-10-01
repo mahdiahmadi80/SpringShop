@@ -11,6 +11,7 @@ import org.example.springshop.model.dto.responsemodel.FavoriteItemResponseModel;
 import org.example.springshop.repository.FavoriteItemRepository;
 import org.example.springshop.repository.ProductRepository;
 import org.example.springshop.repository.UserRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ public class FavoriteItemService {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
     }
-
     public List<FavoriteItemResponseModel> listFavorite() {
         List<FavoriteItemResponseModel> favoriteItemResponseModels = new ArrayList<>();
         favoriteItemRepository.findAll().forEach(favoriteItem -> {

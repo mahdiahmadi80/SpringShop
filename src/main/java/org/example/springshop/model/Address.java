@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.springshop.model.dto.requestmodel.AddressRequestModel;
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 
 @Data

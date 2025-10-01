@@ -4,11 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.springshop.model.dto.requestmodel.UserRequestModel;
 import org.example.springshop.model.dto.responsemodel.UserResponseModel;
 import org.example.springshop.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -19,6 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<UserResponseModel> listUser() {
         return userService.listUser();
@@ -83,6 +86,7 @@ public class UserController {
     public String login(@RequestBody UserRequestModel userRequestModel) {
         return userService.verify(userRequestModel);
     }
+
 
 
 }

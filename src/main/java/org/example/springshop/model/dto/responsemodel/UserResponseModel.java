@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 import org.example.springshop.model.User;
 import org.example.springshop.model.UserRole;
 
+import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Getter
 @NoArgsConstructor
 public class UserResponseModel {
-    @JsonProperty("Id")
+    @JsonProperty("id")
     private Long id;
     @JsonProperty("name")
     private String name;
@@ -28,6 +30,10 @@ public class UserResponseModel {
     private Optional<String> nationalCode;
     @JsonProperty("profilePicture")
     private Optional<String> profilePicture;
+    @JsonProperty("created_At")
+    private LocalDateTime createdAt;
+    @JsonProperty("updated_At")
+    private LocalDateTime updatedAt;
     @JsonProperty("user_role")
     private UserRole userRole;
 
@@ -42,5 +48,7 @@ public class UserResponseModel {
         this.nationalCode = Optional.ofNullable(user.getNationalCode());
         this.profilePicture = Optional.ofNullable(user.getProfilePicture());
         this.userRole = user.getRole();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 }

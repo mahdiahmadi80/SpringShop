@@ -55,7 +55,7 @@ public class OrderService {
     public String orderDelete(Long id) {
         Order order = orderRepository.findOrderById(id).orElseThrow(() -> new OrderNotFoundException(ExceptionMessage.orderNotFound));
         orderItemsRepository.findByOrder(order).forEach(orderItems -> {
-            orderItemsRepository.deleteAll();
+            orderItemsRepository.findByOrder(order);
         });
         orderRepository.deleteById(id);
         return ExceptionMessage.deleteSuccessful;
@@ -66,6 +66,7 @@ public class OrderService {
         Wallet wallet = walletRepository.findWalletByUserId(user).orElseThrow();
         Long balance = wallet.getBalance() + totalPrice;
         wallet.setBalance(balance);
+        walletRepository.save(wallet);
     }
 
     public OrderResponseModel searchById(Long id) {
@@ -93,8 +94,8 @@ public class OrderService {
                 Product product = productRepository.findById(orderItems.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException(ExceptionMessage.productNotFound));
                 product.setInventory(product.backProduct(product, orderItems));
                 productRepository.save(product);
-                orderItemsRepository.deleteAllByOrder(order);
             });
+                orderItemsRepository.deleteAllByOrder(order);
             backBalance(order, order.getTotalAmount());
             orderRepository.deleteById(id);
             return ExceptionMessage.cancelOrderSuccessful;
